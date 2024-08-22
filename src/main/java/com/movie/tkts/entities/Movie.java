@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
@@ -18,11 +17,12 @@ public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
-
-    private String name;
+    private String title;
     private String genre;
-    private int age;
+    private int ageGroup;
+    private int duration;
     private String imgURL;
+    private String description;
 
     @OneToMany(mappedBy = "movie")
     private List<Screening> screenings;

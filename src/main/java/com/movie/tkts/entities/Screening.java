@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Data
 @AllArgsConstructor
@@ -19,18 +19,18 @@ public class Screening {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String date;
+    private LocalDate date;
+    private LocalTime time;
 
     @ManyToOne
-    @JoinColumn(name = "movieId")
+    @JoinColumn(name = "movie_id")
     private Movie movie;
 
     @ManyToOne
-    @JoinColumn(name = "theaterId")
+    @JoinColumn(name = "theater_id")
     private Theater theater;
 
-    @OneToMany(mappedBy = "screening")
-    private List<Booking> bookings;
+//    @OneToMany(mappedBy = "screening")
+//    private List<Booking> bookings;
 
 }

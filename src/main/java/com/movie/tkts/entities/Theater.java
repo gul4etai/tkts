@@ -1,17 +1,10 @@
 package com.movie.tkts.entities;
 
 import jakarta.persistence.*;
-
-import java.util.List;
-
-import org.hibernate.annotations.Cascade;
-//import org.hibernate.annotations.CascadeType;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.List;
 
 @Data
@@ -23,10 +16,11 @@ import java.util.List;
 public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long theatreId;
-
+    private Long id;
+    private String name;
     private int rows;
     private int seats;
+    private int capacity;
 
    //@OneToMany(mappedBy = "theatre")
     /*@OneToMany

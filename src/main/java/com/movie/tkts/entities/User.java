@@ -12,31 +12,20 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users")
 @Entity
+@Table(name = "users")
 public class User {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long userId;
-//    private String username;
-//    private String password;
-//    private String email;
-//    private String role;
-//
-//    //@OneToMany(mappedBy = "user")
-//   /* @ManyToOne
-//    @JoinColumn(name = "user_id", nullable = false)*/
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Booking> bookings;
-
     @Id
-    @SequenceGenerator(name="users_generator", sequenceName="users_id_seq", allocationSize=1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String username;
+
+    @Column(nullable = false, unique = true)
     private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
+    private String username;
     private String role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

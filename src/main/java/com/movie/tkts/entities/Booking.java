@@ -1,14 +1,11 @@
 package com.movie.tkts.entities;
 
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -19,19 +16,20 @@ import java.util.List;
 public class Booking {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "booking_id")
-    private Long bookingId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    @Column(nullable = false)
     private int seats;
 
+    @Column(nullable = false)
+    private LocalDateTime bookingTime;
+
     @ManyToOne
-    @JoinColumn(name = "screeningId")
+    @JoinColumn(name = "screening_id", nullable = false)
     private Screening screening;
 
-  /*  @ManyToOne
-    @JoinColumn(name = "userId")
-    private Long userId;*/
-  @ManyToOne
-  @JoinColumn(name = "user_id", nullable = false)  // Foreign key column named 'user_id'
-  private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
