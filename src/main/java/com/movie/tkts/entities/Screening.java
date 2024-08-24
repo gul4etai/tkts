@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class Screening {
     @JoinColumn(name = "theater_id")
     private Theater theater;
 
-//    @OneToMany(mappedBy = "screening")
-//    private List<Booking> bookings;
+    @OneToMany(mappedBy = "seats", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Seat> seats;
 
 }

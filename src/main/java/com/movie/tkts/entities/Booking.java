@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,8 +20,8 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private int seats;
+    @OneToMany(mappedBy = "booking")
+    private List<BookedSeat> bookedSeats;
 
     @Column(nullable = false)
     private LocalDateTime bookingTime;

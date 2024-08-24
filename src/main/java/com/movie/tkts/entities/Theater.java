@@ -22,9 +22,6 @@ public class Theater {
     private int seats;
     private int capacity;
 
-   //@OneToMany(mappedBy = "theatre")
-    /*@OneToMany
-    @JoinColumn (name = "theater")*/
    @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
    private List<Screening> screenings;  //TODO ? list from utils vs from hibernate is a "bag" no order
 }

@@ -1,6 +1,6 @@
-package com.movie.tkts.entities;
+package com.movie.tkts.dto;
 
-import jakarta.persistence.*;
+import com.movie.tkts.entities.Screening;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
-@Table(name = "movies")
-public class Movie {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class MovieDto {
+
     private Long movieId;
     private String title;
     private String genre;
@@ -23,9 +20,5 @@ public class Movie {
     private int duration;
     private String imgURL;
     private String description;
-
-    // One Movie can have many Screenings
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Screening> screenings;
-
+    private List<ScreeningDto> screenings;
 }
