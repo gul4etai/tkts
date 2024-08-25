@@ -30,7 +30,4 @@ public class Screening {
     @JoinColumn(name = "theater_id")
     private Theater theater;
 
-//    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Seat> seats;
-
 }

@@ -20,13 +20,8 @@ public class Seat {
     @Column(nullable = false)
     int seatNum;
 
-    @Column(nullable = false)
-    boolean isBooked;
-
     @ManyToOne
     @JoinColumn(name = "theater_id", nullable = false)
     private Theater theater;
-
-
 
 }

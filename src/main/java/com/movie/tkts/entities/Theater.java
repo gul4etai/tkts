@@ -16,11 +16,11 @@ public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true)
     private String name;
+
     private int rows;
     private int seatsInRow;
     private int capacity;
-
-//   @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//   private List<Screening> screenings;  //TODO ? list from utils vs from hibernate is a "bag" no order
 }

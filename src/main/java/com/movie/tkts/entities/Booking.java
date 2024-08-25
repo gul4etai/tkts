@@ -19,9 +19,6 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @OneToMany(mappedBy = "booking")
-//    private List<BookedSeat> bookedSeats;
-
     @Column(nullable = false)
     private LocalDateTime bookingTime;
 
