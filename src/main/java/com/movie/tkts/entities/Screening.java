@@ -14,13 +14,12 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "screenings")
 public class Screening {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate date;
+    private LocalDate date; //key?
     private LocalTime time;
 
     @ManyToOne
@@ -31,7 +30,7 @@ public class Screening {
     @JoinColumn(name = "theater_id")
     private Theater theater;
 
-    @OneToMany(mappedBy = "seats", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Seat> seats;
+//    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<Seat> seats;
 
 }

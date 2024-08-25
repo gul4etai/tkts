@@ -12,16 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "theaters")
 public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private int rows;
-    private int seats;
+    private int seatsInRow;
     private int capacity;
 
-   @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-   private List<Screening> screenings;  //TODO ? list from utils vs from hibernate is a "bag" no order
+//   @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//   private List<Screening> screenings;  //TODO ? list from utils vs from hibernate is a "bag" no order
 }

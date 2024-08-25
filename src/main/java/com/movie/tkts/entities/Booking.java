@@ -13,15 +13,14 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "bookings")
 public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "booking")
-    private List<BookedSeat> bookedSeats;
+//    @OneToMany(mappedBy = "booking")
+//    private List<BookedSeat> bookedSeats;
 
     @Column(nullable = false)
     private LocalDateTime bookingTime;

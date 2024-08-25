@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "movies")
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +23,8 @@ public class Movie {
     private String imgURL;
     private String description;
 
-    // One Movie can have many Screenings
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Screening> screenings;
+//    // One Movie can have many Screenings
+//    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Screening> screenings;
 
 }
