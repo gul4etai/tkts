@@ -1,9 +1,12 @@
 package com.movie.tkts.dto;
 
 
+import com.movie.tkts.entities.Booking;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +17,5 @@ public class UserDto {
     private String email;
     private String username;
     private boolean isAdmin;
+    private List<BookingDto> bookings;
 }

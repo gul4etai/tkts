@@ -12,28 +12,36 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 public class Ticket {
-    public enum Status {
-        AVAILABLE, BOOKED, RESERVED, CANCELED
+    public enum TicketStatus {
+        ACTIVE,
+        CANCELED,
+        EXPIRED
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ticketId;
 
-    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private double price;
+
+    @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
-    @ManyToOne (cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private TicketStatus status;   //todo: needed?
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "screening_id")
+    private Screening screening;
 
 }

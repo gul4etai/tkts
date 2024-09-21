@@ -17,7 +17,7 @@ public class Booking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long bookingId;
 
     @Column(nullable = false)
     private LocalDateTime bookingTime;
@@ -29,4 +29,10 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "booking")
+    private List<Ticket> tickets;
+/*    @ManyToOne
+    @JoinColumn(name = "seat_id")
+    private Seat seat;*/
 }

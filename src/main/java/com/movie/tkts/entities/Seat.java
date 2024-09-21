@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,13 +17,18 @@ public class Seat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long seatId;
 
     @Column(nullable = false)
     int seatNum;
+    @Column(nullable = false)
+    int rowNum;
 
     @ManyToOne
     @JoinColumn(name = "theater_id", nullable = false)
     private Theater theater;
+
+  /*  @OneToMany(mappedBy = "seat")
+    private List<Ticket> tickets;*/
 
 }

@@ -18,7 +18,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false)
     private String password;
@@ -28,4 +28,6 @@ public class User {
     private String username;
     private boolean isAdmin;
 
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings;
 }

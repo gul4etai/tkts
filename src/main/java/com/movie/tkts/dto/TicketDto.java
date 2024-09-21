@@ -12,5 +12,5 @@ public class TicketDto {
     private Long bookingId;
     private Long seatId;
     private int status;
-    private Long userId;
+    private Long screeningId;
 }

@@ -17,14 +17,13 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movieId;
     private String title;
+    private double price;
     private String genre;
-    private int ageGroup;
     private int duration;
     private String imgURL;
     private String description;
 
-//    // One Movie can have many Screenings
-//    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Screening> screenings;
 
+    @OneToMany(mappedBy = "movie")
+    private List<Screening> screenings;
 }

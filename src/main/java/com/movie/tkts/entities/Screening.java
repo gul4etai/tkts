@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class Screening {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long screeningId;
     private LocalDate date; //key?
     private LocalTime time;
 
@@ -30,4 +31,14 @@ public class Screening {
     @JoinColumn(name = "theater_id")
     private Theater theater;
 
+/*    @ManyToMany
+    @JoinTable(
+            name = "screening_booked_seats",
+            joinColumns = @JoinColumn(name = "screening_id"),
+            inverseJoinColumns = @JoinColumn(name = "seat_id")
+    )
+    private List<Seat> bookedSeats = new ArrayList<>();*/
+
+    @OneToMany(mappedBy = "screening")
+    private List<Ticket> tickets = new ArrayList<>();
 }

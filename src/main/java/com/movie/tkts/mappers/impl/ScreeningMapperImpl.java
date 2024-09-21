@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
 
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ScreeningMapperImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;

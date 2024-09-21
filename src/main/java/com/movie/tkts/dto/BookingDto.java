@@ -1,11 +1,13 @@
 package com.movie.tkts.dto;
 
 import com.movie.tkts.entities.Screening;
+import com.movie.tkts.entities.Ticket;
 import com.movie.tkts.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
 public class BookingDto {
     private Long id;
     private LocalDateTime bookingTime;
-    private Screening screening;
-    private User user;
+    private ScreeningDto screening;
+    private UserDto user;
+    private List<TicketDto> tickets;
 }

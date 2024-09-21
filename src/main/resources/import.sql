@@ -1,2 +1,0 @@
-INSERT INTO users (password, email, username, role) VALUES ('password1', 'user1@example.com', 'user1', 'USER');
-INSERT INTO users (password, email, username, role) VALUES ('password2', 'user2@example.com', 'user2', 'ADMIN');

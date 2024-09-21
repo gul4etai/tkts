@@ -15,12 +15,16 @@ import java.util.List;
 public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long theaterId;
 
     @Column(nullable = false, unique = true)
     private String name;
-
     private int rows;
     private int seatsInRow;
-    private int capacity;
+
+    @OneToMany(mappedBy = "theater")
+    private List<Screening> screenings;
+
+    @OneToMany(mappedBy = "theater")
+    private List<Seat> seats;
 }
