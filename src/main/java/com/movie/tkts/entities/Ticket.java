@@ -20,7 +20,7 @@ public class Ticket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ticketId;
+    private Long id;
 
     private double price;
 
@@ -35,10 +35,6 @@ public class Ticket {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TicketStatus status;   //todo: needed?
-
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private User user;
 
     @ManyToOne
     @JoinColumn(name = "screening_id")

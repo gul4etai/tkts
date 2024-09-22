@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -13,12 +14,13 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
+//@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    //@Column(name = "user_id")
+    private Long id;
 
     @Column(nullable = false)
     private String password;
@@ -28,6 +30,6 @@ public class User {
     private String username;
     private boolean isAdmin;
 
-    @OneToMany(mappedBy = "user")
-    private List<Booking> bookings;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings  = new ArrayList<>();
 }

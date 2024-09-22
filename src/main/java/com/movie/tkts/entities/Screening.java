@@ -19,7 +19,8 @@ public class Screening {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long screeningId;
+    //@Column(name = "screening_id")
+    private Long id;
     private LocalDate date; //key?
     private LocalTime time;
 
@@ -39,6 +40,6 @@ public class Screening {
     )
     private List<Seat> bookedSeats = new ArrayList<>();*/
 
-    @OneToMany(mappedBy = "screening")
+    @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>();
 }

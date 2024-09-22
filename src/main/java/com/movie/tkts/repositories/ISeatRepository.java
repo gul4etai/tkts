@@ -8,9 +8,9 @@ import java.util.List;
 
 public interface ISeatRepository extends JpaRepository<Seat, Long> {
 
-    List<Seat> findAllByTheater_TheaterId(Long theaterId);
+    List<Seat> findAllByTheaterId(Long theaterId);
 
 
-    @Query("SELECT s FROM Seat s WHERE s.theater.theaterId = :theaterId AND s NOT IN (SELECT t.seat FROM Ticket t WHERE t.screening.screeningId = :screeningId)")
+    @Query("SELECT s FROM Seat s WHERE s.theater.id = :theaterId AND s NOT IN (SELECT t.seat FROM Ticket t WHERE t.screening.id = :screeningId)")
     List<Seat> getAvailableSeats(Long screeningId);
 }

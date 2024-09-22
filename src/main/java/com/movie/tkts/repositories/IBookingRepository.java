@@ -18,5 +18,5 @@ public interface IBookingRepository extends JpaRepository<Booking, Long> {
     List<Object[]> findMostWatchedMovies(@Param("startDate") LocalDateTime startDate,
                                          @Param("endDate") LocalDateTime endDate);
 
-    List<Booking> findByUser_userId(Long userId);
+    List<Booking> findByUserId(Long userId);
 }

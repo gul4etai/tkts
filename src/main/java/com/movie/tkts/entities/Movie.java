@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,15 +17,17 @@ import java.util.List;
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long movieId;
+   // @Column(name = "movie_id")
+    private Long id;
     private String title;
     private double price;
     private String genre;
     private int duration;
+    @Column(name = "img_url")
     private String imgURL;
     private String description;
 
 
-    @OneToMany(mappedBy = "movie")
-    private List<Screening> screenings;
+//    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Screening> screenings  = new ArrayList<>();
 }

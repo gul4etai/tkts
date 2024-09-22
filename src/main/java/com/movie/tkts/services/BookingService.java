@@ -96,7 +96,7 @@ public class BookingService {
 
     // Method to fetch all bookings by user
     public List<BookingDto> getBookingsByUser(Long userId) {
-        List<Booking> bookings = bookingRepository.findByUser_userId(userId);
+        List<Booking> bookings = bookingRepository.findByUserId(userId);
         return bookings.stream()
                 .map(bookingMapper::toDto)
                 .collect(Collectors.toList());
@@ -115,7 +115,7 @@ public class BookingService {
             if (screeningRepository.findById(screeningId).isEmpty()) {
                 throw new IllegalStateException("Screening not found with id: " + screeningId);
             }
-            if (seatRepository.findAllByTheater_TheaterId(theaterId).isEmpty()) {
+            if (seatRepository.findAllByTheaterId(theaterId).isEmpty()) {
                 throw new IllegalStateException("No seats found for theater id: " + theaterId);
             }
             List<Seat> availableSeats = seatRepository.getAvailableSeats(theaterId);

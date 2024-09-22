@@ -17,7 +17,8 @@ public class Seat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long seatId;
+    //@Column(name = "seat_id")
+    private Long id;
 
     @Column(nullable = false)
     int seatNum;

@@ -41,24 +41,35 @@ public class MovieService {
 
     @Transactional
     public MovieDto createMovie(MovieDto movieDto) {
+        // Convert DTO to entity
         Movie movie = movieMapper.toEntity(movieDto);
 
-        // If screenings are provided, set the relationship to the movie
-        if (movie.getScreenings() != null) {
-            for (Screening screening : movie.getScreenings()) {
-                screening.setMovie(movie);
+        // Save the movie first (without screenings)
+        Movie savedMovie = movieRepository.save(movie);
+
+        // Handle screenings separately
+        if (movieDto.getScreenings() != null) {
+            for (ScreeningDto screeningDto : movieDto.getScreenings()) {
+                Screening screening = screeningMapper.toEntity(screeningDto);
+                screening.setMovie(savedMovie);  // Link screening to the saved movie
+
+                // Save each screening
+                screeningRepository.save(screening);
             }
         }
 
-        Movie savedMovie = movieRepository.save(movie);
+        // Return the saved movie as a DTO
         return movieMapper.toDto(savedMovie);
     }
 
+
     @Transactional
     public MovieDto updateMovie(Long movieId, MovieDto movieDto) {
+        // Fetch the movie
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
 
+        // Update movie fields
         if (movieDto.getTitle() != null) {
             movie.setTitle(movieDto.getTitle());
         }
@@ -83,27 +94,35 @@ public class MovieService {
             movie.setDescription(movieDto.getDescription());
         }
 
-        // Handle screenings update or addition
+        // Save the movie first (without screenings)
+        Movie updatedMovie = movieRepository.save(movie);
+
+        // Handle screenings update or addition separately
         if (movieDto.getScreenings() != null) {
             for (ScreeningDto screeningDto : movieDto.getScreenings()) {
                 Screening screening;
+
                 if (screeningDto.getId() != null) {
+                    // Update existing screening
                     screening = screeningRepository.findById(screeningDto.getId())
                             .orElseThrow(() -> new ResourceNotFoundException("Screening not found"));
                     screening.setDate(screeningDto.getDate());
                     screening.setTime(screeningDto.getTime());
                     screening.setTheater(screeningMapper.toEntity(screeningDto).getTheater());
                 } else {
+                    // Create new screening
                     screening = screeningMapper.toEntity(screeningDto);
-                    screening.setMovie(movie);
-                    movie.getScreenings().add(screening);
+                    screening.setMovie(movie); // Link screening to the movie
                 }
+
+                // Save or update the screening
+                screeningRepository.save(screening);
             }
         }
 
-        Movie updatedMovie = movieRepository.save(movie);
         return movieMapper.toDto(updatedMovie);
     }
+
 
     @Transactional
     public void deleteMovie(Long movieId) {
@@ -142,49 +161,6 @@ public class MovieService {
         List<Movie> movies = movieRepository.findLeastBookedMovies(startDate, endDate);
         return movies.stream().map(movieMapper::toDto).collect(Collectors.toList());
     }
-  /*   @Transactional
-    public MovieDto createMovie(MovieDto movieDto, MultipartFile image) throws IOException {
-        Movie movie = movieMapper.toEntity(movieDto);
-
-        if (image != null && !image.isEmpty()) {
-            String fileName = saveImage(image);
-            movie.setImgURL("/movieImgs/" + fileName); // Assuming a relative path
-        }
-        Movie savedMovie = movieRepository.save(movie);
-        return movieMapper.toDto(savedMovie);
-    }
-
-   @Transactional
-    public MovieDto updateMovie(Long movieId, MovieDto movieDto, MultipartFile image) throws IOException {
-        if (!movieRepository.existsById(movieId)) {
-            throw new RuntimeException("Movie not found");
-        }
-
-        Movie movie = movieMapper.toEntity(movieDto);
-        movie.setMovieId(movieId);
-
-        if (image != null && !image.isEmpty()) {
-            String fileName = saveImage(image);
-            movie.setImgURL("/Images/" + fileName); // Assuming a relative path
-        }
-
-        Movie updatedMovie = movieRepository.save(movie);
-        return movieMapper.toDto(updatedMovie);
-    }
-
-    private String saveImage(MultipartFile image) throws IOException {
-        String fileName = image.getOriginalFilename();
-        File fileSaveDir = new File(uploadDir);
-
-        if (!fileSaveDir.exists()) {
-            fileSaveDir.mkdirs();
-        }
-
-        File imageFile = new File(fileSaveDir, fileName);
-        image.transferTo(imageFile);
-        return fileName;
-    }*/
-
 
 }
 

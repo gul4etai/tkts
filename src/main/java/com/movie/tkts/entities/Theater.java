@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,16 +17,17 @@ import java.util.List;
 public class Theater {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long theaterId;
+    //@Column(name = "theater_id")
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
     private int rows;
     private int seatsInRow;
 
-    @OneToMany(mappedBy = "theater")
-    private List<Screening> screenings;
+    @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Screening> screenings  = new ArrayList<>();
 
-    @OneToMany(mappedBy = "theater")
-    private List<Seat> seats;
+    @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Seat> seats  = new ArrayList<>();
 }

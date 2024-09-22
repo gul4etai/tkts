@@ -18,7 +18,6 @@ import com.movie.tkts.entities.Ticket;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +65,7 @@ public class ScreeningService {
                 .orElseThrow(() -> new ResourceNotFoundException("Screening not found"));
 
         // Get all seats in the theater for this screening
-        List<Seat> allSeats = seatRepository.findAllByTheater_TheaterId(screening.getTheater().getTheaterId());
+        List<Seat> allSeats = seatRepository.findAllByTheaterId(screening.getTheater().getId());
 
         // Get all booked seats for the screening
         List<Seat> bookedSeats = screening.getTickets().stream()

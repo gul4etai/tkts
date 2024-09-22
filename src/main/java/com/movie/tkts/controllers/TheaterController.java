@@ -1,5 +1,6 @@
 package com.movie.tkts.controllers;
 
+import com.movie.tkts.dto.TheaterDto;
 import com.movie.tkts.entities.Theater;
 import com.movie.tkts.services.TheaterService;
 import org.springframework.http.HttpStatus;
@@ -33,28 +34,22 @@ public class TheaterController {
     }
 
     @PostMapping
-    public ResponseEntity<Theater> createTheater(@RequestBody Theater theater) {
-        Theater createdTheater = theaterService.createTheater(theater);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTheater);
+    public ResponseEntity<TheaterDto> createTheater(@RequestBody TheaterDto theaterDto) {
+        TheaterDto savedTheater = theaterService.createTheater(theaterDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedTheater);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Theater> updateTheater(@PathVariable Long id, @RequestBody Theater updatedTheater) {
-        try {
-            Theater theater = theaterService.updateTheater(id, updatedTheater);
-            return ResponseEntity.ok(theater);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<TheaterDto> updateTheater(
+            @PathVariable Long id,
+            @RequestBody TheaterDto theaterDto) {
+        TheaterDto updatedTheater = theaterService.updateTheater(id, theaterDto);
+        return ResponseEntity.ok(updatedTheater);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTheater(@PathVariable Long id) {
-        try {
-            theaterService.deleteTheater(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        theaterService.deleteTheater(id);
+        return ResponseEntity.noContent().build();
     }
 }

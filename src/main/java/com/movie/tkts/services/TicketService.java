@@ -33,7 +33,7 @@ public class TicketService {
     @Transactional
     public TicketDto orderTicket(TicketDto ticketDTO) {
         // Check if the seat is already taken for the screening
-        boolean seatTaken = ticketRepository.existsBySeat_seatIdAndScreening_screeningId(
+        boolean seatTaken = ticketRepository.existsBySeatIdAndScreeningId(
                 ticketDTO.getSeatId(), ticketDTO.getScreeningId()
         );
         if (seatTaken) {

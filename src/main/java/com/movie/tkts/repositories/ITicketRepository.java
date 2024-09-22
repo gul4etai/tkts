@@ -7,8 +7,8 @@ import java.util.Collection;
 
 public interface ITicketRepository extends JpaRepository<Ticket, Long> {
 
-    boolean existsBySeat_seatIdAndScreening_screeningId(Long seatId, Long screeningId);
+    boolean existsBySeatIdAndScreeningId(Long seatId, Long screeningId);
 
-    Collection<Ticket> findByScreening_screeningId(Long screeningId);
+    Collection<Ticket> findByScreeningId(Long screeningId);
 
 }

@@ -75,19 +75,5 @@ public class MovieController {
         List<MovieDto> movies = movieService.getLeastBookedMovies(startDate, endDate);
         return ResponseEntity.ok(movies);
     }
-//    @PostMapping(consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-//    public ResponseEntity<MovieDto> createMovie(@RequestPart("movie") MovieDto movieDto,
-//                                                @RequestPart("image") MultipartFile image) throws IOException {
-//        MovieDto createdMovie = movieService.createMovie(movieDto, image);
-//        return new ResponseEntity<>(createdMovie, HttpStatus.CREATED);
-//    }
-//
-//    @PostMapping("/json-only")
-//    public ResponseEntity<MovieDto> createMovie(@RequestBody MovieDto movieDto) {
-//        MovieDto createdMovie = movieService.createMovie(movieDto);
-//        return new ResponseEntity<>(createdMovie, HttpStatus.CREATED);
-//    }
-
-
 
 }
