@@ -16,6 +16,6 @@ public class TheaterDto {
     private String name;
     private int rows;
     private int seatsInRow;
-    private List<ScreeningDto> screenings;
-    private List<SeatDto> seats;
+//    private List<ScreeningDto> screenings;
+//    private List<SeatDto> seats;
 }

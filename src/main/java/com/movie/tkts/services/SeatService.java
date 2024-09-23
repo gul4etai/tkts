@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SeatService {
@@ -23,6 +24,13 @@ public class SeatService {
     @Transactional(readOnly = true)
     public List<Seat> getAllSeats() {
         return seatRepository.findAll();
+    }
+
+    public List<SeatDto> getSeatsByTheaterDateTime(Long theaterId, String date, String time) {
+        List<Seat> seats = seatRepository.findSeatsByTheaterDateTime(theaterId, date, time);
+        return seats.stream()
+                .map(seatMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

@@ -7,10 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TicketDto {
-    private Long id;
-    private Long bookingId;
-    private Long seatId;
-    //private int status;
-    private Long screeningId;
+public class SeatRequestDto {
+
+
+        private int row;
+        private int seat;
 }

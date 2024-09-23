@@ -32,7 +32,7 @@ public class Ticket {
     @JoinColumn(name = "seat_id", nullable = false)
     private Seat seat;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TicketStatus status;   //todo: needed?
 

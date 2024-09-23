@@ -1,6 +1,9 @@
 package com.movie.tkts.services;
 
+import com.movie.tkts.dto.UserDto;
 import com.movie.tkts.entities.User;
+import com.movie.tkts.exception.ResourceNotFoundException;
+import com.movie.tkts.mappers.impl.UserMapperImpl;
 import com.movie.tkts.repositories.IUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,9 +14,11 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final IUserRepository userRepository;
+    private final UserMapperImpl userMapper;
 
-    public UserService(IUserRepository userRepository) {
+    public UserService(IUserRepository userRepository, UserMapperImpl userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     @Transactional(readOnly = true)
@@ -27,13 +32,17 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserByEmail(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email));
+    public User getUserByEmail(String email) {
+
+
+
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
     @Transactional
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDto createUser(UserDto userDto) {
+        return userMapper.toDto(userRepository.save(userMapper.toEntity(userDto)));
     }
 
     @Transactional

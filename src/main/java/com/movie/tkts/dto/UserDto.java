@@ -12,6 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
+
+    /**
+     {
+     "password": "1232",
+     "email": "user@mail.com",
+     "username": "nnne",
+     "isAdmin":false
+     }
+     **/
     private Long id;
     private String password;
     private String email;

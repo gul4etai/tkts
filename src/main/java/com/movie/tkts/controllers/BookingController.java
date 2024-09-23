@@ -1,9 +1,9 @@
 package com.movie.tkts.controllers;
 
 import com.movie.tkts.dto.BookingDto;
-import com.movie.tkts.dto.SeatDto;
-import com.movie.tkts.entities.Booking;
+import com.movie.tkts.dto.BookingRequestDto;
 import com.movie.tkts.services.BookingService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,7 +17,16 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    // Endpoint to create a booking with multiple seats
+    @PostMapping("/create")
+    public ResponseEntity<BookingDto> createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
+        BookingDto createdBooking = bookingService.createBooking( bookingRequestDto);
+//                bookingRequestDto.getScreeningId(),
+//                bookingRequestDto.getUserId(),
+//                bookingRequestDto.getSeatIds()
+        //);
+        return new ResponseEntity<>(createdBooking, HttpStatus.CREATED);
+    }
+/*    // Endpoint to create a booking with multiple seats
     @PostMapping("/create")
     public ResponseEntity<BookingDto> createBooking(
             @RequestParam Long screeningId,
@@ -25,7 +34,7 @@ public class BookingController {
             @RequestBody List<Long> seatIds) {
         BookingDto bookingDto = bookingService.createBooking(screeningId, userId, seatIds);
         return ResponseEntity.ok(bookingDto);
-    }
+    }*/
 /*    @PostMapping
     public Booking createBooking(@RequestParam Long screeningId,
                                  @RequestParam Long userId,

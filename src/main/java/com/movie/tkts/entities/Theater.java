@@ -25,6 +25,8 @@ public class Theater {
     private int rows;
     private int seatsInRow;
 
+
+    //remove?
     @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Screening> screenings  = new ArrayList<>();
 

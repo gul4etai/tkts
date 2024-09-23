@@ -1,10 +1,15 @@
 package com.movie.tkts.mappers.impl;
 
 import com.movie.tkts.dto.ScreeningDto;
+import com.movie.tkts.dto.SeatDto;
+import com.movie.tkts.dto.TicketDto;
 import com.movie.tkts.entities.Screening;
 import com.movie.tkts.mappers.IMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
@@ -13,11 +18,27 @@ public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
 
     public ScreeningMapperImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+        // Custom mapping to avoid recursion or handle specific fields
+        // Custom mapping for Screening to ScreeningDto
+        modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
+            mapper.map(src -> src.getMovie().getId(), ScreeningDto::setMovieId); // Map movie's id to movieId in ScreeningDto
+        });
+        modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
+            mapper.skip(ScreeningDto::setOccupiedSeats); // Assuming no direct mapping of occupied seats
+        });
     }
+
+
 
     @Override
     public ScreeningDto toDto(Screening screening) {
-        return modelMapper.map(screening, ScreeningDto.class);
+
+
+        if (screening == null) {
+            return null;
+        }
+
+        return modelMapper.map(screening,ScreeningDto.class);
     }
 
     @Override

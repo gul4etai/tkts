@@ -8,19 +8,20 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IMovieRepository extends JpaRepository<Movie, Long> {
+    //List<Movie> findAll();
 
     // Get movies by theater ID
-    @Query("SELECT DISTINCT m FROM Movie m JOIN m.screenings s WHERE s.theater.id = :theaterId")
+    @Query("SELECT DISTINCT m FROM Movie m JOIN Screening s ON m.id = s.movie.id WHERE s.theater.id = :theaterId")
     List<Movie> findByTheaterId(@Param("theaterId") Long theaterId);
 
     // Most booked movies in a given date range
-    @Query("SELECT m FROM Movie m JOIN m.screenings s JOIN s.tickets t " +
+    @Query("SELECT m FROM Movie m JOIN Screening s ON m.id = s.movie.id JOIN s.tickets t " +
             "WHERE s.date BETWEEN :startDate AND :endDate " +
             "GROUP BY m ORDER BY COUNT(t) DESC")
     List<Movie> findMostBookedMovies(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
     // Least booked movies in a given date range
-    @Query("SELECT m FROM Movie m JOIN m.screenings s JOIN s.tickets t " +
+    @Query("SELECT m FROM Movie m JOIN Screening s ON m.id = s.movie.id JOIN s.tickets t " +
             "WHERE s.date BETWEEN :startDate AND :endDate " +
             "GROUP BY m ORDER BY COUNT(t) ASC")
     List<Movie> findLeastBookedMovies(@Param("startDate") String startDate, @Param("endDate") String endDate);

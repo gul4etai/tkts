@@ -1,26 +1,39 @@
 package com.movie.tkts.mappers.impl;
 
 import com.movie.tkts.dto.BookingDto;
+import com.movie.tkts.dto.TicketDto;
 import com.movie.tkts.entities.Booking;
 import com.movie.tkts.mappers.IMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class BookingMapperImpl implements IMapper<Booking, BookingDto> {
 
     private final ModelMapper modelMapper;
+    private final TicketMapperImpl ticketMapper;
 
-    public BookingMapperImpl(ModelMapper modelMapper) {
+    public BookingMapperImpl(ModelMapper modelMapper, TicketMapperImpl ticketMapper) {
         this.modelMapper = modelMapper;
+        this.ticketMapper = ticketMapper;
     }
 
     @Override
     public BookingDto toDto(Booking booking) {
-        if (booking == null) {
-            return null;
-        }
-        return modelMapper.map(booking, BookingDto.class);
+        // Create a new BookingDto object manually or with ModelMapper
+        BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
+
+        // Manually map nested collections like tickets or seats if needed
+        List<TicketDto> ticketDtos = booking.getTickets().stream()
+                .map(ticketMapper::toDto)  // Use your ticketMapper or manually map each ticket
+                .collect(Collectors.toList());
+
+        bookingDto.setTickets(ticketDtos);
+
+        return bookingDto;
     }
 
     @Override

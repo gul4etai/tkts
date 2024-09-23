@@ -21,7 +21,7 @@ public class Screening {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@Column(name = "screening_id")
     private Long id;
-    private LocalDate date; //key?
+    private LocalDate date;
     private LocalTime time;
 
     @ManyToOne

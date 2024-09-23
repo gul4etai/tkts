@@ -4,7 +4,6 @@ import com.movie.tkts.dto.TheaterDto;
 import com.movie.tkts.entities.Seat;
 import com.movie.tkts.entities.Theater;
 import com.movie.tkts.exception.ResourceNotFoundException;
-import com.movie.tkts.mappers.impl.ScreeningMapperImpl;
 import com.movie.tkts.mappers.impl.TheaterMapperImpl;
 import com.movie.tkts.repositories.ITheaterRepository;
 import org.springframework.stereotype.Service;

@@ -21,7 +21,8 @@ public class ScreeningDto {
     private Long id;
     private LocalDate date;
     private LocalTime time;
-    private MovieDto movie;
-    private TheaterDto theater;
-    private List<SeatDto> seats;
+    private Long movieId;
+    private Long theaterId;
+    private List<int[]> occupiedSeats;
+   // private List<SeatDto> seats;
 }

@@ -1,7 +1,9 @@
 package com.movie.tkts.controllers;
 
 import com.movie.tkts.dto.TheaterDto;
+import com.movie.tkts.dto.ScreeningDto;
 import com.movie.tkts.entities.Theater;
+import com.movie.tkts.services.ScreeningService;
 import com.movie.tkts.services.TheaterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,11 @@ import java.util.Optional;
 public class TheaterController {
 
     private final TheaterService theaterService;
+    private final ScreeningService screeningService;
 
-    public TheaterController(TheaterService theaterService) {
+    public TheaterController(TheaterService theaterService, ScreeningService screeningService) {
         this.theaterService = theaterService;
+        this.screeningService = screeningService;
     }
 
     @GetMapping
@@ -31,6 +35,16 @@ public class TheaterController {
         Optional<Theater> theater = theaterService.getTheaterById(id);
         return theater.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
+
+    // Get screenings by theater ID
+    @GetMapping("/{id}/screenings")
+    public ResponseEntity<List<ScreeningDto>> getScreeningsByTheaterId(@PathVariable("id") Long id) {
+        List<ScreeningDto> screenings = screeningService.getScreeningsByTheaterId(id);
+        if (screenings.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(screenings);
     }
 
     @PostMapping

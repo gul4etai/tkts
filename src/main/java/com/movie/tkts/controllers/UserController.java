@@ -1,5 +1,6 @@
 package com.movie.tkts.controllers;
 
+import com.movie.tkts.dto.UserDto;
 import com.movie.tkts.entities.User;
 import com.movie.tkts.services.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,13 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public Optional<User> getUserByEmail(@PathVariable String email) {
+    public User getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        return userService.createUser(userDto);
     }
 
     @PutMapping("/{id}")

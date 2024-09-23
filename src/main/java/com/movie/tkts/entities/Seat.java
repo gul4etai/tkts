@@ -1,12 +1,11 @@
 package com.movie.tkts.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -27,6 +26,7 @@ public class Seat {
 
     @ManyToOne
     @JoinColumn(name = "theater_id", nullable = false)
+    @JsonIgnore
     private Theater theater;
 
   /*  @OneToMany(mappedBy = "seat")

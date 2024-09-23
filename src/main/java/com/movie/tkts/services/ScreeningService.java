@@ -59,6 +59,14 @@ public class ScreeningService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public List<ScreeningDto> getScreeningsByTheaterId(Long theaterId) {
+        List<Screening> screenings = screeningRepository.findByTheaterId(theaterId);
+        return screenings.stream()
+                .map(screeningMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     // Fetch available seats for a screening
     public List<SeatDto> getAvailableSeats(Long screeningId) {
         Screening screening = screeningRepository.findById(screeningId)

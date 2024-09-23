@@ -48,4 +48,11 @@ public class SeatController {
     public List<SeatDto> getAvailableSeats(@PathVariable Long screeningId) {
         return seatService.getAvailableSeats(screeningId);
     }
+
+    @GetMapping("/theaters/{theaterId}/seats")
+    public List<SeatDto> getSeatsByTheaterDateTime(@PathVariable Long theaterId,
+                                                   @RequestParam String date,
+                                                   @RequestParam String time) {
+        return seatService.getSeatsByTheaterDateTime(theaterId, date, time);
+    }
 }

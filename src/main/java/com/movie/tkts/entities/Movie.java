@@ -1,5 +1,6 @@
 package com.movie.tkts.entities;
 
+import com.movie.tkts.dto.ScreeningDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,5 @@ public class Movie {
 
 
 //    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Screening> screenings  = new ArrayList<>();
+  // private List<Screening> screenings;
 }
