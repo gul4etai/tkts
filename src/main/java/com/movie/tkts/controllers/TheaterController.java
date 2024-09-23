@@ -1,5 +1,6 @@
 package com.movie.tkts.controllers;
 
+import com.movie.tkts.dto.MovieDto;
 import com.movie.tkts.dto.TheaterDto;
 import com.movie.tkts.dto.ScreeningDto;
 import com.movie.tkts.entities.Theater;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tkts/theaters")
@@ -24,9 +26,10 @@ public class TheaterController {
         this.screeningService = screeningService;
     }
 
+
     @GetMapping
-    public ResponseEntity<List<Theater>> getAllTheaters() {
-        List<Theater> theaters = theaterService.getAllTheaters();
+    public ResponseEntity<List<TheaterDto>> getAllTheaters() {
+        List<TheaterDto> theaters = theaterService.getAllTheaters();
         return ResponseEntity.ok(theaters);
     }
 

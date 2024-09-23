@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TheaterService {
@@ -25,8 +26,11 @@ public class TheaterService {
     }
 
     @Transactional(readOnly = true)
-    public List<Theater> getAllTheaters() {
-        return theaterRepository.findAll();
+    public List<TheaterDto> getAllTheaters() {
+        List<Theater> theaters = theaterRepository.findAll();
+        return theaters.stream()
+                .map(theaterMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

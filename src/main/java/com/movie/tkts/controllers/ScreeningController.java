@@ -102,12 +102,12 @@ public class ScreeningController {
         return screeningService.getScreeningsByDateAndTime(date, time);
     }
 
-    @GetMapping("/search/theater-movie")
+   /* @GetMapping("/search/theater-movie")
     public List<Screening> getScreeningsByTheaterAndMovie(
             @RequestParam TheaterDto theaterDto,
             @RequestParam MovieDto movieDto) {
         return screeningService.getScreeningsByTheaterAndMovie(theaterMapper.toEntity(theaterDto), movieMapper.toEntity(movieDto));
-    }
+    }*/
 //get method to get all screenings for a specific movie
   /*  @GetMapping("/movie/{movieId}")
     public List<ScreeningDto> getScreeningsByMovie(@PathVariable Long movieId) {
