@@ -20,7 +20,9 @@ public class UserMapperImpl implements IMapper<User, UserDto> {
         if (user == null) {
             return null;
         }
-        return modelMapper.map(user, UserDto.class);
+        UserDto userDto = modelMapper.map(user, UserDto.class);
+        System.out.println("UserDto: " + userDto);
+        return userDto;
     }
 
     @Override

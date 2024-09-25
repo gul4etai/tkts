@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tkts/seats")
+@CrossOrigin(origins = "http://localhost:4200")
 public class SeatController {
 
     private final SeatService seatService;

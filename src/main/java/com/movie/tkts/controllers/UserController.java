@@ -3,6 +3,7 @@ package com.movie.tkts.controllers;
 import com.movie.tkts.dto.UserDto;
 import com.movie.tkts.entities.User;
 import com.movie.tkts.services.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tkts/users")
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;
 
@@ -23,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
+    public UserDto getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
@@ -34,12 +36,13 @@ public class UserController {
 
     @PostMapping
     public UserDto createUser(@RequestBody UserDto userDto) {
-        return userService.createUser(userDto);
+        return userService.saveUser(userDto);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        return userService.updateUser(id, userDetails);
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+        UserDto updatedUser = userService.updateUser(id, userDto);
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")

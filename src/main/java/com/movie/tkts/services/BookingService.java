@@ -10,7 +10,11 @@ import com.movie.tkts.mappers.impl.SeatMapperImpl;
 import com.movie.tkts.repositories.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,13 +66,30 @@ public class BookingService {
 
     @Transactional
     public BookingDto createBooking(BookingRequestDto bookingRequestDto) {
+      /*  //date: "2024-10-02", time: "20:00:00
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime dateTime = LocalDateTime.parse(bookingRequestDto.getTime(), formatter);
+//        get date from the dateTime
+        String date = dateTime.toLocalDate().toString();
+//        get time from the dateTime
+        String time = dateTime.toLocalTime().toString();*/
         // Find the user by email
-        User user = userRepository.findByEmail(bookingRequestDto.getUserEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + bookingRequestDto.getUserEmail()));
+        User user = userRepository.findByEmail("admin@mail.com"/*bookingRequestDto.getUserEmail()*/)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " /*+ bookingRequestDto.getUserEmail(*/));
 
         // Find the screening
-        Screening screening = screeningRepository.findById(bookingRequestDto.getScreeningId())
-                .orElseThrow(() -> new ResourceNotFoundException("Screening not found"));
+        // Parse the date and time from the booking request
+        LocalDate date = LocalDate.parse(bookingRequestDto.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalTime time = LocalTime.parse(bookingRequestDto.getTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+        // Find the screening by movieId, theaterId, date, and time
+        Screening screening = screeningRepository.findByMovieIdAndTheaterIdAndDateAndTime(
+                        bookingRequestDto.getMovieId(),
+                        bookingRequestDto.getTheaterId(),
+                        date,
+                        time)
+                .orElseThrow(() -> new ResourceNotFoundException("Screening not found for the specified movie, theater, date, and time"));
+
 
         // Find the theater
         Theater theater = theaterRepository.findById(bookingRequestDto.getTheaterId())
@@ -125,11 +146,32 @@ public class BookingService {
     }
 
 
-    // Method to fetch all bookings by user
+
+   /* // Method to fetch all bookings by user
     public List<BookingDto> getBookingsByUser(Long userId) {
         List<Booking> bookings = bookingRepository.findByUserId(userId);
         return bookings.stream()
                 .map(bookingMapper::toDto)
+                .collect(Collectors.toList());
+    }*/
+
+    // Method to fetch all bookings by user and set movieTitle in BookingDto
+    public List<BookingDto> getBookingsByUser(Long userId) {
+        // Fetch all bookings by userId
+        List<Booking> bookings = bookingRepository.findByUserId(userId);
+
+        return bookings.stream()
+                .map(booking -> {
+                    BookingDto bookingDto = bookingMapper.toDto(booking);
+
+                    // Fetch the movie title from the screening
+                    String movieTitle = booking.getScreening().getMovie().getTitle();
+
+                    // Set the movieTitle in the BookingDto
+                    bookingDto.setMovieTitle(movieTitle);
+
+                    return bookingDto;
+                })
                 .collect(Collectors.toList());
     }
 

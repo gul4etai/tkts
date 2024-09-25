@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tkts/bookings")
+@CrossOrigin(origins = "http://localhost:4200")
 public class BookingController {
     private final BookingService bookingService;
 
@@ -17,9 +18,11 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<BookingDto> createBooking(@RequestBody BookingRequestDto bookingRequestDto) {
+
         BookingDto createdBooking = bookingService.createBooking( bookingRequestDto);
+
 //                bookingRequestDto.getScreeningId(),
 //                bookingRequestDto.getUserId(),
 //                bookingRequestDto.getSeatIds()

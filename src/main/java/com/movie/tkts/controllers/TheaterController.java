@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tkts/theaters")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TheaterController {
 
     private final TheaterService theaterService;

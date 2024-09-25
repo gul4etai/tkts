@@ -14,12 +14,12 @@ import java.util.List;
 public class UserDto {
 
     /**
-     {
-     "password": "1232",
-     "email": "user@mail.com",
-     "username": "nnne",
-     "isAdmin":false
-     }
+     * {
+     * "password": "1232",
+     * "email": "user@mail.com",
+     * "username": "nnne",
+     * "admin":false
+     * }
      **/
     private Long id;
     private String password;

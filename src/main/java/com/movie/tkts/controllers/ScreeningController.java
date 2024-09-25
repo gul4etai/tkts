@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tkts/screenings")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ScreeningController {
 
     private final ScreeningService screeningService;

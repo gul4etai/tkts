@@ -19,6 +19,10 @@ public class BookingMapperImpl implements IMapper<Booking, BookingDto> {
     public BookingMapperImpl(ModelMapper modelMapper, TicketMapperImpl ticketMapper) {
         this.modelMapper = modelMapper;
         this.ticketMapper = ticketMapper;
+        // Skip mapping screenings automatically to avoid recursion issues
+//        modelMapper.typeMap(Movie.class, MovieDto.class).addMappings(mapper -> {
+//            mapper.skip(MovieDto::setScreenings);
+//        });
     }
 
     @Override

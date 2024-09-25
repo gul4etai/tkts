@@ -16,6 +16,7 @@ public class BookingDto {
     private Long id;
     private LocalDateTime bookingTime;
     private ScreeningDto screening;
+    private String movieTitle;
     private Long userId;
     private List<TicketDto> tickets;
 }

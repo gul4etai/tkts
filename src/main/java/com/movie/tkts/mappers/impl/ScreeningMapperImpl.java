@@ -20,9 +20,9 @@ public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
         this.modelMapper = modelMapper;
         // Custom mapping to avoid recursion or handle specific fields
         // Custom mapping for Screening to ScreeningDto
-        modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
+      /*  modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
             mapper.map(src -> src.getMovie().getId(), ScreeningDto::setMovieId); // Map movie's id to movieId in ScreeningDto
-        });
+        });*/
         // Custom mapping for Screening to ScreeningDto: skip mapping of occupied seats
         modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
             mapper.skip(ScreeningDto::setOccupiedSeats);

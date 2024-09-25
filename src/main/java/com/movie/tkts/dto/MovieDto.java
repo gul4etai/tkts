@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class MovieDto {
-    private Long movieId;
+    private Long id;
     private String title;
     private double price;
     private String genre;
