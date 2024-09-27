@@ -2,6 +2,7 @@ package com.movie.tkts.controllers;
 
 import com.movie.tkts.dto.UserDto;
 import com.movie.tkts.entities.User;
+import com.movie.tkts.exception.InvalidPasswordException;
 import com.movie.tkts.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,12 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public User getUserByEmail(@PathVariable String email) {
+    public UserDto getUserByEmail(@PathVariable String email) {
         return userService.getUserByEmail(email);
     }
 
     @PostMapping
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody UserDto userDto) throws InvalidPasswordException {
         return userService.saveUser(userDto);
     }
 

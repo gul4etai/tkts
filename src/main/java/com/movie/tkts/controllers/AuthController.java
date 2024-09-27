@@ -2,9 +2,7 @@ package com.movie.tkts.controllers;
 
 import com.movie.tkts.security.JwtUtil;
 import com.movie.tkts.services.CustomUserDetailsService;
-import lombok.Data;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,7 +30,7 @@ public class AuthController {
         try {
             // Authenticate the user
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(authRequest.getEmail(), authRequest.getPassword())
             );
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password", e);
@@ -40,7 +38,7 @@ public class AuthController {
 
         // Load user details by username
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(authRequest.getEmail());
 
         // Generate the JWT token using UserDetails
         final String jwt = jwtUtil.generateToken(userDetails);
@@ -66,7 +64,7 @@ public class AuthController {
 
 @Getter
 class AuthRequest {
-    private String username;
+    private String email;
     private String password;
 }
 

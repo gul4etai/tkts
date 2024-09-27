@@ -2,7 +2,9 @@ package com.movie.tkts.services;
 
 import com.movie.tkts.dto.UserDto;
 import com.movie.tkts.entities.User;
+import com.movie.tkts.exception.InvalidPasswordException;
 import com.movie.tkts.exception.ResourceNotFoundException;
+import com.movie.tkts.exception.UserAlreadyExistsException;
 import com.movie.tkts.mappers.impl.UserMapperImpl;
 import com.movie.tkts.repositories.IUserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,7 +47,15 @@ public UserDto saveUser(UserDto userDto) {
 
 
 
-    public UserDto saveUser(UserDto userDto) {
+    public UserDto saveUser(UserDto userDto) throws InvalidPasswordException {
+        // Check if the username or email already exists
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            throw new UserAlreadyExistsException("Username already exists");
+        }
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new UserAlreadyExistsException("Email already exists");
+        }
+
         // Convert DTO to entity
         User user = new User();
         user.setUsername(userDto.getUsername());
@@ -53,7 +63,11 @@ public UserDto saveUser(UserDto userDto) {
         user.setAdmin(userDto.isAdmin());
 
         // Encode the password
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        } else {
+            throw new InvalidPasswordException("Password cannot be empty");
+        }
 
         // Save the user
         userRepository.save(user);
@@ -62,21 +76,32 @@ public UserDto saveUser(UserDto userDto) {
         return userMapper.toDto(user);
     }
 
-    // Update existing user
+
     @Transactional
     public UserDto updateUser(Long userId, UserDto userDto) {
-        User existingUser = userRepository.findById(userId)
+        // Find the user by ID
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Update user details based on the provided UserDto
-        existingUser.setUsername(userDto.getUsername());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setPassword(userDto.getPassword());  // Ensure password is encrypted
-        existingUser.setAdmin(userDto.isAdmin());
+        // Update the fields that need to be updated
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setAdmin(userDto.isAdmin());
 
-        User updatedUser = userRepository.save(existingUser);
-        return userMapper.toDto(updatedUser);  // Return the updated user as DTO
+        // If the password is provided and it's different from the current password, encode it
+        if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
+            if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            }
+        }
+
+        // Save the updated user
+        userRepository.save(user);
+
+        // Convert the updated user back to DTO and return it
+        return userMapper.toDto(user);
     }
+
 
  /*   @Transactional
     public UserDto createUser(UserDto userDto) {
@@ -100,9 +125,10 @@ public UserDto saveUser(UserDto userDto) {
     }
 
     @Transactional(readOnly = true)
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+    public UserDto getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+        return userMapper.toDto(user);
     }
 
 /*    @Transactional

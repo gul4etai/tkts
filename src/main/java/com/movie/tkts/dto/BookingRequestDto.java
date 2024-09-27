@@ -14,7 +14,7 @@ import java.util.List;
         /*private Long screeningId;
         private Long userId;
         private List<Long> seatIds;*/
-   // private String userEmail;
+    private String userEmail;
     private Long movieId;
     private Long screeningId;
     private Long theaterId;

@@ -4,6 +4,7 @@ import com.movie.tkts.dto.BookingDto;
 import com.movie.tkts.dto.BookingRequestDto;
 import com.movie.tkts.dto.SeatDto;
 import com.movie.tkts.entities.*;
+import com.movie.tkts.exception.BookingSeatsConflict;
 import com.movie.tkts.exception.ResourceNotFoundException;
 import com.movie.tkts.mappers.impl.BookingMapperImpl;
 import com.movie.tkts.mappers.impl.SeatMapperImpl;
@@ -74,7 +75,7 @@ public class BookingService {
 //        get time from the dateTime
         String time = dateTime.toLocalTime().toString();*/
         // Find the user by email
-        User user = userRepository.findByEmail("admin@mail.com"/*bookingRequestDto.getUserEmail()*/)
+        User user = userRepository.findByEmail(bookingRequestDto.getUserEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " /*+ bookingRequestDto.getUserEmail(*/));
 
         // Find the screening
@@ -114,7 +115,7 @@ public class BookingService {
                 .collect(Collectors.toList());
 
         if (!conflictingSeats.isEmpty()) {
-            throw new IllegalArgumentException("Some seats are already booked: " +
+            throw new BookingSeatsConflict("Some seats are already booked: " +
                     conflictingSeats.stream().map(seat -> "Row: " + seat.getRowNum() + ", Seat: " + seat.getSeatNum()).collect(Collectors.joining(", ")));
         }
 
