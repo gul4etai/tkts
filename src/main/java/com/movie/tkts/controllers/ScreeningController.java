@@ -44,14 +44,12 @@ public class ScreeningController {
         return screeningService.getAllScreenings();
     }
 
-    // Endpoint to get booked seats for a screening
     @GetMapping("/{screeningId}/booked-seats")
     public ResponseEntity<List<SeatDto>> getBookedSeats(@PathVariable Long screeningId) {
         List<SeatDto> bookedSeats = screeningService.getBookedSeats(screeningId);
         return ResponseEntity.ok(bookedSeats);
     }
 
-    // Endpoint to get available seats for a screening
     @GetMapping("/{screeningId}/available-seats")
     public ResponseEntity<List<SeatDto>> getAvailableSeats(@PathVariable Long screeningId) {
         List<SeatDto> availableSeats = screeningService.getAvailableSeats(screeningId);
@@ -63,20 +61,6 @@ public class ScreeningController {
     public ResponseEntity<ScreeningDto> getScreeningById(@PathVariable Long id) {
         ScreeningDto screeningDto = screeningService.getScreeningById(id);
         return new ResponseEntity<>(screeningDto, HttpStatus.OK);
-
-        /*Optional<Screening> returnedScreening = screeningService.getScreeningById(id);
-        if (returnedScreening.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        Screening screening = returnedScreening.get();
-        ScreeningDto screeningDto = screeningMapper.toDto(screening);
-        return new ResponseEntity<>(screeningDto, HttpStatus.OK);*/
-
-        /*Optional<Screening> returnedScreening = screeningService.getScreeningById(id);
-        return returnedScreening.map(screening -> {
-            ScreeningDto screeningDto = screeningMapper.toDto(screening);
-            return new ResponseEntity<>(screeningDto, HttpStatus.OK);
-        }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));*/
     }
 
     @PostMapping
@@ -85,10 +69,6 @@ public class ScreeningController {
         return new ResponseEntity<>(newScreening, HttpStatus.CREATED);
     }
 
-   /* @PutMapping("/{id}")
-    public ResponseEntity<ScreeningDto> updateScreening(@PathVariable Long id, @RequestBody Screening screeningDetails) {
-        return screeningService.updateScreening(id, screeningDetails);
-    }*/
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteScreening(@PathVariable Long id) {
@@ -102,17 +82,5 @@ public class ScreeningController {
             @RequestParam LocalTime time) {
         return screeningService.getScreeningsByDateAndTime(date, time);
     }
-
-   /* @GetMapping("/search/theater-movie")
-    public List<Screening> getScreeningsByTheaterAndMovie(
-            @RequestParam TheaterDto theaterDto,
-            @RequestParam MovieDto movieDto) {
-        return screeningService.getScreeningsByTheaterAndMovie(theaterMapper.toEntity(theaterDto), movieMapper.toEntity(movieDto));
-    }*/
-//get method to get all screenings for a specific movie
-  /*  @GetMapping("/movie/{movieId}")
-    public List<ScreeningDto> getScreeningsByMovie(@PathVariable Long movieId) {
-        return screeningService.getScreeningsByMovie(movieId);
-    }*/
 }
 

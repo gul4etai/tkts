@@ -9,6 +9,8 @@ import com.movie.tkts.exception.ResourceNotFoundException;
 import com.movie.tkts.mappers.impl.BookingMapperImpl;
 import com.movie.tkts.mappers.impl.SeatMapperImpl;
 import com.movie.tkts.repositories.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,23 +69,16 @@ public class BookingService {
 
     @Transactional
     public BookingDto createBooking(BookingRequestDto bookingRequestDto) {
-      /*  //date: "2024-10-02", time: "20:00:00
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime dateTime = LocalDateTime.parse(bookingRequestDto.getTime(), formatter);
-//        get date from the dateTime
-        String date = dateTime.toLocalDate().toString();
-//        get time from the dateTime
-        String time = dateTime.toLocalTime().toString();*/
-        // Find the user by email
-        User user = userRepository.findByEmail(bookingRequestDto.getUserEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " /*+ bookingRequestDto.getUserEmail(*/));
 
-        // Find the screening
-        // Parse the date and time from the booking request
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + username));
+
         LocalDate date = LocalDate.parse(bookingRequestDto.getDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         LocalTime time = LocalTime.parse(bookingRequestDto.getTime(), DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-        // Find the screening by movieId, theaterId, date, and time
         Screening screening = screeningRepository.findByMovieIdAndTheaterIdAndDateAndTime(
                         bookingRequestDto.getMovieId(),
                         bookingRequestDto.getTheaterId(),
@@ -91,12 +86,9 @@ public class BookingService {
                         time)
                 .orElseThrow(() -> new ResourceNotFoundException("Screening not found for the specified movie, theater, date, and time"));
 
-
-        // Find the theater
         Theater theater = theaterRepository.findById(bookingRequestDto.getTheaterId())
                 .orElseThrow(() -> new ResourceNotFoundException("Theater not found with id: " + bookingRequestDto.getTheaterId()));
 
-        // Collect seats based on row and seat number from the request
         List<Seat> seatsToBook = new ArrayList<>();
         for (SeatDto seatDto : bookingRequestDto.getSeats()) {
             Seat seat = seatRepository.findByTheaterAndRowNumAndSeatNum(seatDto.getRowNum(), seatDto.getSeatNum(),theater.getId())
@@ -104,7 +96,7 @@ public class BookingService {
             seatsToBook.add(seat);
         }
 
-        // Check for already booked seats in the screening
+        // check booked seets
         List<Ticket> existingTickets = ticketRepository.findByScreeningId(screening.getId());
         List<Seat> alreadyBookedSeats = existingTickets.stream()
                 .map(Ticket::getSeat)
@@ -119,13 +111,11 @@ public class BookingService {
                     conflictingSeats.stream().map(seat -> "Row: " + seat.getRowNum() + ", Seat: " + seat.getSeatNum()).collect(Collectors.joining(", ")));
         }
 
-        // Create a new booking
         Booking booking = new Booking();
         booking.setScreening(screening);
         booking.setUser(user);
         booking.setBookingTime(LocalDateTime.now());
-
-        // Create tickets for each booked seat
+        //create tickets
         List<Ticket> tickets = seatsToBook.stream().map(seat -> {
             Ticket ticket = new Ticket();
             ticket.setBooking(booking);
@@ -136,39 +126,18 @@ public class BookingService {
             return ticket;
         }).collect(Collectors.toList());
 
-        // Set tickets to the booking
         booking.setTickets(tickets);
-
-        // Save the booking and tickets
         bookingRepository.save(booking);
-
-        // Return the BookingDto
         return bookingMapper.toDto(booking);
     }
 
-
-
-   /* // Method to fetch all bookings by user
     public List<BookingDto> getBookingsByUser(Long userId) {
-        List<Booking> bookings = bookingRepository.findByUserId(userId);
-        return bookings.stream()
-                .map(bookingMapper::toDto)
-                .collect(Collectors.toList());
-    }*/
-
-    // Method to fetch all bookings by user and set movieTitle in BookingDto
-    public List<BookingDto> getBookingsByUser(Long userId) {
-        // Fetch all bookings by userId
         List<Booking> bookings = bookingRepository.findByUserId(userId);
 
         return bookings.stream()
                 .map(booking -> {
                     BookingDto bookingDto = bookingMapper.toDto(booking);
-
-                    // Fetch the movie title from the screening
                     String movieTitle = booking.getScreening().getMovie().getTitle();
-
-                    // Set the movieTitle in the BookingDto
                     bookingDto.setMovieTitle(movieTitle);
 
                     return bookingDto;
@@ -176,7 +145,6 @@ public class BookingService {
                 .collect(Collectors.toList());
     }
 
-    // Method to fetch a booking by its ID
     public BookingDto getBookingById(Long bookingId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
@@ -198,7 +166,7 @@ public class BookingService {
                     .collect(Collectors.toList());
         } catch (Exception e) {
             System.out.println("Error fetching available seats: " + e.getMessage());
-            throw e;  // Optionally rethrow or handle the exception as business logic demands
+            throw e;
         }
     }
 

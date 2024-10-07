@@ -40,10 +40,9 @@ public class TheaterService {
 
     @Transactional
     public TheaterDto createTheater(TheaterDto theaterDto) {
-        // Convert DTO to entity
         Theater theater = theaterMapper.toEntity(theaterDto);
 
-        // Auto-generate seats
+        // generate seats
         List<Seat> seats = new ArrayList<>();
         for (int rowNum = 1; rowNum <= theater.getRows(); rowNum++) {
             for (int seatNum = 1; seatNum <= theater.getSeatsInRow(); seatNum++) {
@@ -55,26 +54,18 @@ public class TheaterService {
             }
         }
         theater.setSeats(seats);
-
-        // Save the theater with the auto-generated seats
         Theater savedTheater = theaterRepository.save(theater);
-
-        // Return the DTO
         return theaterMapper.toDto(savedTheater);
     }
 
     @Transactional
     public TheaterDto updateTheater(Long theaterId, TheaterDto theaterDto) {
-        // Fetch the existing theater
         Theater existingTheater = theaterRepository.findById(theaterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Theater not found with id: " + theaterId));
 
-        // Update basic fields
         existingTheater.setName(theaterDto.getName());
 
-        // Check if the rows or seats in row changed
         if (theaterDto.getRows() != existingTheater.getRows() || theaterDto.getSeatsInRow() != existingTheater.getSeatsInRow()) {
-            // If rows or seats in row changed, regenerate the seats
             List<Seat> newSeats = new ArrayList<>();
             for (int rowNum = 1; rowNum <= theaterDto.getRows(); rowNum++) {
                 for (int seatNum = 1; seatNum <= theaterDto.getSeatsInRow(); seatNum++) {
@@ -85,10 +76,9 @@ public class TheaterService {
                     newSeats.add(seat);
                 }
             }
-            existingTheater.setSeats(newSeats);  // Replace old seats with new ones
+            existingTheater.setSeats(newSeats);
         }
 
-        // Update the theater entity in the database
         Theater updatedTheater = theaterRepository.save(existingTheater);
         return theaterMapper.toDto(updatedTheater);
     }
@@ -98,7 +88,6 @@ public class TheaterService {
         Theater theater = theaterRepository.findById(theaterId)
                 .orElseThrow(() -> new ResourceNotFoundException("Theater not found with id: " + theaterId));
 
-        // Delete the theater (this will cascade to delete seats and screenings)
         theaterRepository.delete(theater);
     }
 }

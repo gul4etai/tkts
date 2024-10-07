@@ -1,16 +1,16 @@
 package com.movie.tkts.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -24,22 +24,21 @@ public class Screening {
     private LocalDate date;
     private LocalTime time;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
+    @JsonIgnore
     private Movie movie;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "theater_id")
+    @JsonIgnore
     private Theater theater;
 
-/*    @ManyToMany
-    @JoinTable(
-            name = "screening_booked_seats",
-            joinColumns = @JoinColumn(name = "screening_id"),
-            inverseJoinColumns = @JoinColumn(name = "seat_id")
-    )
-    private List<Seat> bookedSeats = new ArrayList<>();*/
+    @OneToMany(mappedBy = "screening")  //cascade deletion is handled in booking
+    private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets = new ArrayList<>();
+    private List<Booking> bookings;
+
+
 }

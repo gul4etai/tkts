@@ -27,16 +27,13 @@ public class BookingMapperImpl implements IMapper<Booking, BookingDto> {
 
     @Override
     public BookingDto toDto(Booking booking) {
-        // Create a new BookingDto object manually or with ModelMapper
         BookingDto bookingDto = modelMapper.map(booking, BookingDto.class);
 
-        // Manually map nested collections like tickets or seats if needed
         List<TicketDto> ticketDtos = booking.getTickets().stream()
-                .map(ticketMapper::toDto)  // Use your ticketMapper or manually map each ticket
+                .map(ticketMapper::toDto)
                 .collect(Collectors.toList());
 
         bookingDto.setTickets(ticketDtos);
-
         return bookingDto;
     }
 

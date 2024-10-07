@@ -26,35 +26,4 @@ public class TicketController {
         return ResponseEntity.ok(orderedTicket);
     }
 
-//
-//    private final TicketService ticketService;
-//
-//    public TicketController(TicketService ticketService) {
-//        this.ticketService = ticketService;
-//    }
-//
-//    @GetMapping
-//    public List<Ticket> getAllTickets() {
-//        return ticketService.getAllTickets();
-//    }
-//
-//    @GetMapping("/{id}")
-//    public Optional<Ticket> getTicketById(@PathVariable Long id) {
-//        return ticketService.getTicketById(id);
-//    }
-//
-//    @PostMapping
-//    public Ticket createTicket(@RequestBody Ticket ticket) {
-//        return ticketService.createTicket(ticket);
-//    }
-//
-////    @PutMapping("/{id}")
-////    public Ticket updateTicket(@PathVariable Long id, @RequestBody Ticket ticketDetails) {
-////        return ticketService.updateTicket(id, ticketDetails);
-////    }
-//
-//    @DeleteMapping("/{id}")
-//    public void deleteTicket(@PathVariable Long id) {
-//        ticketService.deleteTicket(id);
-//    }
 }

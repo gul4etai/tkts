@@ -11,8 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -26,29 +30,9 @@ public class UserService {
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder1;
     }
-/*
-    public User saveUser(UserDto userDto) {
-        User user = new User();
-        user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setEmail(userDto.getEmail());
-        return userRepository.save(user);
-    }*/
 
-
-/*// Save new user latest not encripted
-@Transactional
-public UserDto saveUser(UserDto userDto) {
-    System.out.println("UserDto before save ");
-    User user = userMapper.toEntity(userDto);
-    User savedUser = userRepository.save(user);
-    return userMapper.toDto(savedUser);  // Return a DTO after saving
-}*/
-
-
-
+    @Transactional
     public UserDto saveUser(UserDto userDto) throws InvalidPasswordException {
-        // Check if the username or email already exists
         if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new UserAlreadyExistsException("Username already exists");
         }
@@ -56,61 +40,40 @@ public UserDto saveUser(UserDto userDto) {
             throw new UserAlreadyExistsException("Email already exists");
         }
 
-        // Convert DTO to entity
         User user = new User();
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setAdmin(userDto.isAdmin());
 
-        // Encode the password
+        // password encoding
         if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         } else {
             throw new InvalidPasswordException("Password cannot be empty");
         }
 
-        // Save the user
         userRepository.save(user);
-
-        // Convert back to DTO and return
         return userMapper.toDto(user);
     }
 
-
     @Transactional
     public UserDto updateUser(Long userId, UserDto userDto) {
-        // Find the user by ID
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Update the fields that need to be updated
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setAdmin(userDto.isAdmin());
 
-        // If the password is provided and it's different from the current password, encode it
         if (userDto.getPassword() != null && !userDto.getPassword().isEmpty()) {
             if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             }
         }
 
-        // Save the updated user
         userRepository.save(user);
-
-        // Convert the updated user back to DTO and return it
         return userMapper.toDto(user);
     }
-
-
- /*   @Transactional
-    public UserDto createUser(UserDto userDto) {
-        User user = userMapper.toEntity(userDto); // Convert DTO to Entity
-        User savedUser = userRepository.save(user);  // Save the user entity
-
-        // Convert the saved User entity back to a DTO and return it
-        return userMapper.toDto(savedUser);
-    }*/
 
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
@@ -131,28 +94,34 @@ public UserDto saveUser(UserDto userDto) {
         return userMapper.toDto(user);
     }
 
-/*    @Transactional
-    public UserDto createUser(UserDto userDto) {
-        return userMapper.toDto(userRepository.save(userMapper.toEntity(userDto)));
-    }*/
-
-/*    @Transactional
-    public UserDto updateUser(Long userId, UserDto userDto) {
-        User existingUser = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        // Update user details based on the provided UserDto
-        existingUser.setUsername(userDto.getUsername());
-        existingUser.setEmail(userDto.getEmail());
-        existingUser.setPassword(userDto.getPassword());  // Ensure password is encrypted
-        existingUser.setAdmin(userDto.isAdmin());
-
-        User updatedUser = userRepository.save(existingUser);
-        return userMapper.toDto(updatedUser);  // Return the updated user as DTO
-    }*/
 
     @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public List<UserDto> getMostActiveUsers(String startDate, String endDate) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime start = LocalDateTime.parse(startDate + "T00:00:00", formatter);
+        LocalDateTime end = LocalDateTime.parse(endDate + "T23:59:59", formatter);
+
+        List<User> mostActiveUsers = userRepository.findMostActiveUsers(start, end);
+        return mostActiveUsers.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDto> getLeastActiveUsers(String startDate, String endDate) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        LocalDateTime start = LocalDateTime.parse(startDate + "T00:00:00", formatter);
+        LocalDateTime end = LocalDateTime.parse(endDate + "T23:59:59", formatter);
+
+
+        List<User> leastActiveUsers = userRepository.findLeastActiveUsers(start, end);
+        return leastActiveUsers.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

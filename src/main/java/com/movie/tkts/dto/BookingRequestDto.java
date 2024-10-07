@@ -11,15 +11,13 @@ import java.util.List;
     @AllArgsConstructor
     @NoArgsConstructor
     public class BookingRequestDto {
-        /*private Long screeningId;
-        private Long userId;
-        private List<Long> seatIds;*/
+
     private String userEmail;
     private Long movieId;
     private Long screeningId;
     private Long theaterId;
-    private String date;  // Ensure this is properly formatted in the request
-    private String time;  // Make sure time is properly formatted as well
-    private List<SeatDto> seats;// Just the seat IDs, not the full Seat entity
+    private String date;
+    private String time;
+    private List<SeatDto> seats;
     }
 

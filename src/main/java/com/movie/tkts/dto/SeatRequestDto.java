@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SeatRequestDto {
 
-
         private int row;
         private int seat;
 }

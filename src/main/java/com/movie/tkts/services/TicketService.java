@@ -32,58 +32,15 @@ public class TicketService {
 
     @Transactional
     public TicketDto orderTicket(TicketDto ticketDTO) {
-        // Check if the seat is already taken for the screening
+        // Check if the seat is booked
         boolean seatTaken = ticketRepository.existsBySeatIdAndScreeningId(
                 ticketDTO.getSeatId(), ticketDTO.getScreeningId()
         );
         if (seatTaken) {
             throw new RuntimeException("The seat is already taken for this screening.");
         }
-        // Convert DTO to entity
         Ticket ticket = ticketMapperImpl.toEntity(ticketDTO);
-
-        // Save the ticket entity to the database
         ticket = ticketRepository.save(ticket);
-
-        // Convert the saved entity back to DTO and return it
         return ticketMapper.toDto(ticket);
     }
-
-
-
-//    private final ITicketRepository ticketRepository;
-//
-//    public TicketService(ITicketRepository ticketRepository) {
-//        this.ticketRepository = ticketRepository;
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public List<Ticket> getAllTickets() {
-//        return ticketRepository.findAll();
-//    }
-//
-//    @Transactional(readOnly = true)
-//    public Optional<Ticket> getTicketById(Long id) {
-//        return ticketRepository.findById(id);
-//    }
-//
-//    @Transactional
-//    public Ticket createTicket(Ticket ticket) {
-//        return ticketRepository.save(ticket);
-//    }
-//
-////    @Transactional
-////    public Ticket updateTicket(Long id, Ticket ticketDetails) {
-////        Ticket ticket = ticketRepository.findById(id)
-////                .orElseThrow(() -> new RuntimeException("Ticket not found"));
-////        ticket.setBooking(ticketDetails.getBooking());
-////        ticket.setSeat(ticketDetails.getSeat());
-////        ticket.setStatus(ticketDetails.getStatus());
-////        return ticketRepository.save(ticket);
-////    }
-//
-//    @Transactional
-//    public void deleteTicket(Long id) {
-//        ticketRepository.deleteById(id);
-//    }
 }

@@ -14,7 +14,6 @@ import java.util.Optional;
 
 public interface IScreeningRepository extends JpaRepository <Screening, Long> {
 
-   // Optional<Screening> findById(Long id);
 
     List<Screening> findByDateAndTime(LocalDate date, LocalTime time);
 
@@ -22,7 +21,8 @@ public interface IScreeningRepository extends JpaRepository <Screening, Long> {
 
     List<Screening> findByTheaterId(Long theaterId);
 
-    @Query("SELECT s FROM Screening s WHERE s.movie.id = :movieId")
+    //@Query("SELECT s FROM Screening s WHERE s.movie.id = :movieId")
+    @Query("SELECT s.id, s.date, s.time, s.theater.id FROM Screening s WHERE s.movie.id = :movieId")
     List<Screening> findByMovieId(@Param("movieId") Long movieId);
 
     @Query("SELECT s FROM Screening s JOIN s.tickets t WHERE s.movie.id = :movieId")
@@ -32,4 +32,6 @@ public interface IScreeningRepository extends JpaRepository <Screening, Long> {
     Optional<Screening> findScreening(Long movieId, Long theaterId, String date, String time);
 
     Optional<Screening> findByMovieIdAndTheaterIdAndDateAndTime(Long movieId, Long theaterId, LocalDate parse, LocalTime parse1);
+
+    List<Screening> findByMovie_Id(Long movieId);
 }

@@ -104,16 +104,6 @@ public class ScreeningService {
         return screeningMapper.toDto(savedScreening);
     }
 
- /*   @Transactional
-    public Screening updateScreening(Long id, Screening screeningDetails) {
-        Screening screening = screeningRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Screening not found"));
-        screening.setStartDate(screeningDetails.getStartDate());
-        screening.setTime(screeningDetails.getTime());
-        screening.setMovie(screeningDetails.getMovie());
-        screening.setTheater(screeningDetails.getTheater());
-        return screeningRepository.save(screening);
-    }*/
 
     @Transactional
     public void deleteScreening(Long id) {

@@ -51,4 +51,16 @@ public class UserController {
         userService.deleteUser(id);
     }
 
+    @GetMapping("/most-active/{startDate}/{endDate}")
+    public ResponseEntity<List<UserDto>> getMostActiveUsers(@PathVariable String startDate, @PathVariable String endDate) {
+        List<UserDto> mostActiveUsers = userService.getMostActiveUsers(startDate, endDate);
+        return ResponseEntity.ok(mostActiveUsers);
+    }
+
+    @GetMapping("/least-active/{startDate}/{endDate}")
+    public ResponseEntity<List<UserDto>> getLeastActiveUsers(@PathVariable String startDate, @PathVariable String endDate) {
+        List<UserDto> leastActiveUsers = userService.getLeastActiveUsers(startDate, endDate);
+        return ResponseEntity.ok(leastActiveUsers);
+    }
+
 }

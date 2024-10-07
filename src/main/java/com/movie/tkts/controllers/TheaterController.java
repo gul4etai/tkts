@@ -41,7 +41,6 @@ public class TheaterController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // Get screenings by theater ID
     @GetMapping("/{id}/screenings")
     public ResponseEntity<List<ScreeningDto>> getScreeningsByTheaterId(@PathVariable("id") Long id) {
         List<ScreeningDto> screenings = screeningService.getScreeningsByTheaterId(id);

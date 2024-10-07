@@ -6,6 +6,9 @@ import com.movie.tkts.dto.TicketDto;
 import com.movie.tkts.entities.Screening;
 import com.movie.tkts.mappers.IMapper;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeMap;
+import org.modelmapper.config.Configuration;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,32 +21,27 @@ public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
 
     public ScreeningMapperImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-        // Custom mapping to avoid recursion or handle specific fields
-        // Custom mapping for Screening to ScreeningDto
-      /*  modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
-            mapper.map(src -> src.getMovie().getId(), ScreeningDto::setMovieId); // Map movie's id to movieId in ScreeningDto
-        });*/
-        // Custom mapping for Screening to ScreeningDto: skip mapping of occupied seats
-        modelMapper.typeMap(Screening.class, ScreeningDto.class).addMappings(mapper -> {
-            mapper.skip(ScreeningDto::setOccupiedSeats);
-        });
+        configureModelMapper();
     }
 
+    private void configureModelMapper() {
+        modelMapper.createTypeMap(Screening.class, ScreeningDto.class)
+                .addMappings(mapper -> {
+                    mapper.skip(ScreeningDto::setOccupiedSeats);
+                });
 
+    }
 
-    @Override
     public ScreeningDto toDto(Screening screening) {
+        if (screening == null) return null;
 
-
-        if (screening == null) {
-            return null;
-        }
-
-        return modelMapper.map(screening,ScreeningDto.class);
+        return modelMapper.map(screening, ScreeningDto.class);
     }
 
-    @Override
     public Screening toEntity(ScreeningDto screeningDto) {
+        if (screeningDto == null) return null;
+
         return modelMapper.map(screeningDto, Screening.class);
     }
 }
+

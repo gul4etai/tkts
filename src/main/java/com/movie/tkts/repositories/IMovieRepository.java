@@ -5,26 +5,24 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface IMovieRepository extends JpaRepository<Movie, Long> {
-    //List<Movie> findAll();
 
-    // Get movies by theater ID
     @Query("SELECT DISTINCT m FROM Movie m JOIN Screening s ON m.id = s.movie.id WHERE s.theater.id = :theaterId")
     List<Movie> findByTheaterId(@Param("theaterId") Long theaterId);
 
-    // Most booked movies in a given date range
     @Query("SELECT m FROM Movie m JOIN Screening s ON m.id = s.movie.id JOIN s.tickets t " +
             "WHERE s.date BETWEEN :startDate AND :endDate " +
             "GROUP BY m ORDER BY COUNT(t) DESC")
-    List<Movie> findMostBookedMovies(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<Movie> findMostBookedMovies(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    // Least booked movies in a given date range
-    @Query("SELECT m FROM Movie m JOIN Screening s ON m.id = s.movie.id JOIN s.tickets t " +
-            "WHERE s.date BETWEEN :startDate AND :endDate " +
+    @Query("SELECT m FROM Movie m LEFT JOIN Screening s ON m.id = s.movie.id LEFT JOIN s.tickets t " +
+            "WHERE s.date BETWEEN :startDate AND :endDate OR s.date IS NULL " +
             "GROUP BY m ORDER BY COUNT(t) ASC")
-    List<Movie> findLeastBookedMovies(@Param("startDate") String startDate, @Param("endDate") String endDate);
+    List<Movie> findLeastBookedMovies(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
 }
 
 

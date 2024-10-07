@@ -1,5 +1,6 @@
 package com.movie.tkts.config;
 
+import com.movie.tkts.security.JwtAuthenticationFilter;
 import com.movie.tkts.services.CustomUserDetailsService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.context.annotation.Bean;
@@ -44,53 +46,41 @@ public class SecurityConfig {
     }
 
     @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())  // Disable CSRF for development purposes
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // Enable CORS with a configuration source
+                .csrf(csrf -> csrf.disable())
+                .cors(withDefaults())
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // Allow all requests without authentication
+                        .anyRequest().permitAll()
                 )
-                .formLogin(form -> form.disable())  // Disable form login
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .formLogin(form -> form.disable())
                 .logout(logout -> logout.permitAll());
-
-                /*.csrf(csrf -> csrf.disable())  // Disable CSRF for development purposes
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()  // Allow all requests without authentication
-                )
-                .formLogin(form -> form.disable())  // Disable form login
-                .logout(LogoutConfigurer::permitAll);  // Allow logout*/
 
         return http.build();
     }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));  // Set allowed origins
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));  // Set allowed methods
-        configuration.setAllowedHeaders(List.of("*"));  // Allow all headers
-        configuration.setAllowCredentials(true);  // Allow credentials (if needed)
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "Accept"));
+        configuration.setExposedHeaders(List.of("Authorization"));
+        configuration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);  // Apply CORS configuration to all endpoints
+        source.registerCorsConfiguration("/**", configuration);
 
         return source;
     }
-    // Global CORS configuration
-    @Bean
-    public WebMvcConfigurer corsConfigurer() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")  // Apply CORS to all endpoints
-                        .allowedOrigins("http://localhost:4200")  // Allow specific origin
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")  // Allow specific methods
-                        .allowedHeaders("*")  // Allow all headers
-                        .allowCredentials(true);  // Allow credentials (if needed)
-            }
-        };
-    }
-    // Add the authenticationManager bean to avoid StackOverflowError
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -98,6 +88,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();  // Use BCrypt to encode passwords
+        return new BCryptPasswordEncoder();  // BCrypt encoding
     }
 }

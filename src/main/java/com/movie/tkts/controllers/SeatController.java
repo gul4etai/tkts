@@ -44,7 +44,6 @@ public class SeatController {
         seatService.deleteSeat(id);
     }
 
-    //getmapping to get available seats for a screening in a spesific theater
     @GetMapping("/screening/{screeningId}/available-seats")
     public List<SeatDto> getAvailableSeats(@PathVariable Long screeningId) {
         return seatService.getAvailableSeats(screeningId);

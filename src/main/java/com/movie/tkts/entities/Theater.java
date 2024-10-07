@@ -1,15 +1,13 @@
 package com.movie.tkts.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -26,7 +24,7 @@ public class Theater {
     private int seatsInRow;
 
 
-    //remove?
+
 //    @OneToMany(mappedBy = "theater", cascade = CascadeType.ALL, orphanRemoval = true)
 //    private List<Screening> screenings  = new ArrayList<>();
 

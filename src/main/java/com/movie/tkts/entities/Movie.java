@@ -1,16 +1,16 @@
 package com.movie.tkts.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.movie.tkts.dto.ScreeningDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -18,7 +18,6 @@ import java.util.List;
 public class Movie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   // @Column(name = "movie_id")
     private Long id;
     private String title;
     private double price;
@@ -28,7 +27,6 @@ public class Movie {
     private String imgURL;
     private String description;
 
-
-//    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
-  // private List<Screening> screenings;
+  @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Screening> screenings;
 }
