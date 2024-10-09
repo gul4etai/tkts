@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class Seat {
     @JsonIgnore
     private Theater theater;
 
-  /*  @OneToMany(mappedBy = "seat")
-    private List<Ticket> tickets;*/
+    @OneToMany(mappedBy = "seat",fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
 
 }

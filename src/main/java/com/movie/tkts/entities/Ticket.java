@@ -22,7 +22,7 @@ public class Ticket {
 
     private double price;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id", nullable = false)
     private Booking booking;
 
@@ -34,7 +34,7 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     private TicketStatus status;   //todo: needed?
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "screening_id")
     private Screening screening;
 

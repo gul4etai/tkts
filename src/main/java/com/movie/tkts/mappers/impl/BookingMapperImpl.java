@@ -23,6 +23,10 @@ public class BookingMapperImpl implements IMapper<Booking, BookingDto> {
 //        modelMapper.typeMap(Movie.class, MovieDto.class).addMappings(mapper -> {
 //            mapper.skip(MovieDto::setScreenings);
 //        });
+      /*  modelMapper.typeMap(Booking.class, BookingDto.class).addMappings(mapper -> {
+            // Skip the bookings field in ScreeningDto to prevent recursion
+            mapper.skip(BookingDto::setScreening);
+        });*/
     }
 
     @Override

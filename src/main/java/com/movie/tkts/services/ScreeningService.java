@@ -43,53 +43,6 @@ public class ScreeningService {
                 .collect(Collectors.toList());
     }
 
-    // Fetch booked seats for a screening
-    public List<SeatDto> getBookedSeats(Long screeningId) {
-        Screening screening = screeningRepository.findById(screeningId)
-                .orElseThrow(() -> new ResourceNotFoundException("Screening not found"));
-
-        // Get all booked seats for the screening
-        List<Seat> bookedSeats = screening.getTickets().stream()
-                .map(Ticket::getSeat)
-                .collect(Collectors.toList());
-
-        // Convert booked seats to DTO
-        return bookedSeats.stream()
-                .map(seatMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ScreeningDto> getScreeningsByTheaterId(Long theaterId) {
-        List<Screening> screenings = screeningRepository.findByTheaterId(theaterId);
-        return screenings.stream()
-                .map(screeningMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    // Fetch available seats for a screening
-    public List<SeatDto> getAvailableSeats(Long screeningId) {
-        Screening screening = screeningRepository.findById(screeningId)
-                .orElseThrow(() -> new ResourceNotFoundException("Screening not found"));
-
-        // Get all seats in the theater for this screening
-        List<Seat> allSeats = seatRepository.findAllByTheaterId(screening.getTheater().getId());
-
-        // Get all booked seats for the screening
-        List<Seat> bookedSeats = screening.getTickets().stream()
-                .map(Ticket::getSeat)
-                .collect(Collectors.toList());
-
-        // Filter out the booked seats from the total seats
-        List<Seat> availableSeats = allSeats.stream()
-                .filter(seat -> !bookedSeats.contains(seat))
-                .collect(Collectors.toList());
-
-        // Convert available seats to DTO
-        return availableSeats.stream()
-                .map(seatMapper::toDto)
-                .collect(Collectors.toList());
-    }
 
     @Transactional(readOnly = true)
     public ScreeningDto getScreeningById(Long id) {

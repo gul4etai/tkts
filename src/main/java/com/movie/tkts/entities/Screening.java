@@ -24,9 +24,9 @@ public class Screening {
     private LocalDate date;
     private LocalTime time;
 
+//    @JsonIgnore
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
-    @JsonIgnore
     private Movie movie;
 
     @ManyToOne (fetch = FetchType.LAZY)
@@ -34,8 +34,8 @@ public class Screening {
     @JsonIgnore
     private Theater theater;
 
-    @OneToMany(mappedBy = "screening")  //cascade deletion is handled in booking
-    private List<Ticket> tickets = new ArrayList<>();
+//    @OneToMany(mappedBy = "screening", fetch = FetchType.LAZY)  //cascade deletion is handled in booking
+//    private List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "screening", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;

@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         return userService.getAllUsers();
     }
 
@@ -38,6 +38,11 @@ public class UserController {
     @PostMapping
     public UserDto createUser(@RequestBody UserDto userDto) throws InvalidPasswordException {
         return userService.saveUser(userDto);
+    }
+
+    @PostMapping("set-admin/{id}")
+    public UserDto makeAdmin(@PathVariable Long id){
+        return userService.makeAdmin(id);
     }
 
     @PutMapping("/{id}")

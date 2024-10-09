@@ -30,9 +30,9 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getBookingById(id));
     }
 
-    @GetMapping("/user/{userId}")
-    public List<BookingDto> getBookingsByUserId(@PathVariable Long userId) {
-        return bookingService.getBookingsByUser(userId);
+    @GetMapping("/user/{email}")
+    public List<BookingDto> getBookingsByUser(@PathVariable String email) {
+        return bookingService.getBookingsByUser(email);
     }
 }
 

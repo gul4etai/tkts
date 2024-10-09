@@ -25,8 +25,8 @@ public interface IScreeningRepository extends JpaRepository <Screening, Long> {
     @Query("SELECT s.id, s.date, s.time, s.theater.id FROM Screening s WHERE s.movie.id = :movieId")
     List<Screening> findByMovieId(@Param("movieId") Long movieId);
 
-    @Query("SELECT s FROM Screening s JOIN s.tickets t WHERE s.movie.id = :movieId")
-    List<Screening> findScreeningsWithBookedSeatsByMovieId(Long movieId);
+   /* @Query("SELECT s FROM Screening s JOIN s.tickets t WHERE s.movie.id = :movieId")
+    List<Screening> findScreeningsWithBookedSeatsByMovieId(Long movieId);*/
 
     @Query("SELECT s FROM Screening s WHERE s.movie.id = :movieId AND s.theater.id = :theaterId AND s.date = :date AND s.time = :time")
     Optional<Screening> findScreening(Long movieId, Long theaterId, String date, String time);

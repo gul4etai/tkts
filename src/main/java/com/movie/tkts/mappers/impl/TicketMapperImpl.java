@@ -1,5 +1,7 @@
 package com.movie.tkts.mappers.impl;
 
+import com.movie.tkts.dto.ScreeningDto;
+import com.movie.tkts.entities.Screening;
 import com.movie.tkts.entities.Ticket;
 import com.movie.tkts.dto.TicketDto;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,16 @@ public class TicketMapperImpl implements IMapper<Ticket, TicketDto> {
 
     public TicketMapperImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
+       /* modelMapper.createTypeMap(Ticket.class, TicketDto.class)
+                .addMappings(mapper -> {
+                    mapper.skip(TicketDto::setBookingId);
+                })
+                .addMappings(mapper -> {
+                    mapper.skip(TicketDto::setBookingId);
+                })
+                .addMappings(mapper -> {
+                    mapper.skip(TicketDto::setScreeningId);
+                });*/
     }
 
     @Override

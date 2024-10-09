@@ -1,6 +1,8 @@
 package com.movie.tkts.services;
 
+import com.movie.tkts.dto.BookingDto;
 import com.movie.tkts.dto.UserDto;
+import com.movie.tkts.entities.Booking;
 import com.movie.tkts.entities.User;
 import com.movie.tkts.exception.InvalidPasswordException;
 import com.movie.tkts.exception.ResourceNotFoundException;
@@ -23,12 +25,14 @@ public class UserService {
     private final IUserRepository userRepository;
     private final UserMapperImpl userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final BookingService bookingService;
 
 
-    public UserService(IUserRepository userRepository, UserMapperImpl userMapper, PasswordEncoder passwordEncoder, PasswordEncoder passwordEncoder1) {
+    public UserService(IUserRepository userRepository, UserMapperImpl userMapper, PasswordEncoder passwordEncoder, PasswordEncoder passwordEncoder1, BookingService bookingService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder1;
+        this.bookingService = bookingService;
     }
 
     @Transactional
@@ -61,7 +65,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        user.setUsername(userDto.getUsername());
+        user.setUsername(userDto.getEmail());
         user.setEmail(userDto.getEmail());
         user.setAdmin(userDto.isAdmin());
 
@@ -76,8 +80,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(userMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -91,7 +98,10 @@ public class UserService {
     public UserDto getUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
-        return userMapper.toDto(user);
+        List<BookingDto> userBookings = bookingService.getBookingsByUser(email);
+        UserDto userDto = userMapper.toDto(user);
+        userDto.setBookings(userBookings);
+        return userDto;
     }
 
 
@@ -123,5 +133,13 @@ public class UserService {
         return leastActiveUsers.stream()
                 .map(userMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public UserDto makeAdmin(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+        user.setAdmin(true);
+        userRepository.save(user);
+        return userMapper.toDto(user);
     }
 }

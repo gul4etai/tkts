@@ -41,14 +41,14 @@ public class TheaterController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    @GetMapping("/{id}/screenings")
+/*    @GetMapping("/{id}/screenings")
     public ResponseEntity<List<ScreeningDto>> getScreeningsByTheaterId(@PathVariable("id") Long id) {
         List<ScreeningDto> screenings = screeningService.getScreeningsByTheaterId(id);
         if (screenings.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(screenings);
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<TheaterDto> createTheater(@RequestBody TheaterDto theaterDto) {

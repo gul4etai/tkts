@@ -1,16 +1,15 @@
 package com.movie.tkts.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class BookingRequestDto {
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class BookingRequestDto {
 
     private String userEmail;
     private Long movieId;
@@ -19,5 +18,5 @@ import java.util.List;
     private String date;
     private String time;
     private List<SeatDto> seats;
-    }
+}
 

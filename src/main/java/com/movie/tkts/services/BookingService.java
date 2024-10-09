@@ -131,8 +131,8 @@ public class BookingService {
         return bookingMapper.toDto(booking);
     }
 
-    public List<BookingDto> getBookingsByUser(Long userId) {
-        List<Booking> bookings = bookingRepository.findByUserId(userId);
+    public List<BookingDto> getBookingsByUser(String email) {
+        List<Booking> bookings = bookingRepository.findByUserEmail(email);
 
         return bookings.stream()
                 .map(booking -> {

@@ -2,13 +2,12 @@ package com.movie.tkts.dto;
 
 
 import com.movie.tkts.entities.Booking;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {

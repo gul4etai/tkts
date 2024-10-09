@@ -6,15 +6,14 @@ import com.movie.tkts.entities.Movie;
 import com.movie.tkts.entities.Seat;
 import com.movie.tkts.entities.Theater;
 import com.movie.tkts.entities.Ticket;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -25,6 +24,7 @@ public class ScreeningDto {
 
     private Long theaterId;
     private List<int[]> occupiedSeats;
+  //  private List<BookingDto> bookings;
    // private List<SeatDto> seats;
     // private Long movieId;
 }

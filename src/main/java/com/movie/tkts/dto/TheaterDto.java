@@ -3,13 +3,12 @@ package com.movie.tkts.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.movie.tkts.entities.Screening;
 import com.movie.tkts.entities.Seat;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class TheaterDto {

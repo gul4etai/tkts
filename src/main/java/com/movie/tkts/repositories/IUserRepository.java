@@ -1,5 +1,6 @@
 package com.movie.tkts.repositories;
 
+import com.movie.tkts.dto.UserDto;
 import com.movie.tkts.entities.Movie;
 import com.movie.tkts.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,6 +20,7 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     boolean existsByUsername(String username);
 
     boolean existsByEmail(String email);
+
     @Query("SELECT u FROM User u JOIN u.bookings b " +
             "WHERE b.bookingTime BETWEEN :startDate AND :endDate " +
             "GROUP BY u ORDER BY COUNT(b) DESC")
@@ -27,4 +29,9 @@ public interface IUserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u LEFT JOIN u.bookings b ON b.bookingTime BETWEEN :startDate AND :endDate " +
             "GROUP BY u ORDER BY COUNT(b) ASC")
     List<User> findLeastActiveUsers(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
+   /* @Query("SELECT new com.movie.tkts.dto.UserDto(u.email, u.admin) FROM User u")
+    List<UserDto> getAllUsers();*/
+
+
 }
