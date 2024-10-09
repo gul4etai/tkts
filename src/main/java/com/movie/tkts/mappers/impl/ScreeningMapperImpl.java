@@ -35,11 +35,7 @@ public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
 
     }
 
-  /*  public ScreeningDto toDto(Screening screening) {
-        if (screening == null) return null;
 
-        return modelMapper.map(screening, ScreeningDto.class);
-    }*/
   @Override
   public ScreeningDto toDto(Screening screening) {
       if (screening == null) {
@@ -47,20 +43,6 @@ public class ScreeningMapperImpl implements IMapper<Screening, ScreeningDto> {
       }
       return modelMapper.map(screening, ScreeningDto.class);
 
-   /*   ScreeningDto screeningDto = new ScreeningDto();
-      screeningDto.setId(screening.getId());
-      screeningDto.setDate(screening.getDate());
-      screeningDto.setTime(screening.getTime());
-      screeningDto.setTheaterId(screening.getTheater().getId());
-*/
-      // Custom logic to exclude bookings (if bookings exist)
-      // Do NOT map bookings into ScreeningDto
-     /* screeningDto.setOccupiedSeats(screening.getTickets() != null ?
-              screening.getTickets().stream()
-                      .map(ticket -> new int[]{ticket.getSeat().getRowNum(), ticket.getSeat().getSeatNum()})
-                      .collect(java.util.stream.Collectors.toList()) : new java.util.ArrayList<>());*/
-
-     // return screeningDto;
   }
 
     public Screening toEntity(ScreeningDto screeningDto) {

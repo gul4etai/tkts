@@ -18,9 +18,10 @@ public interface IMovieRepository extends JpaRepository<Movie, Long> {
             "GROUP BY m ORDER BY COUNT(b) DESC")
     List<Movie> findMostBookedMovies(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT m FROM Movie m JOIN Screening s ON m.id = s.movie.id JOIN s.bookings b " +
+    @Query("SELECT m FROM Movie m LEFT JOIN Screening s ON m.id = s.movie.id LEFT JOIN s.bookings b " +
             "WHERE s.date BETWEEN :startDate AND :endDate " +
-            "GROUP BY m ORDER BY COUNT(b) ASC")
+            "GROUP BY m " +
+            "ORDER BY COUNT(b) ASC")
     List<Movie> findLeastBookedMovies(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
 }

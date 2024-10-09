@@ -24,32 +24,23 @@ public class MovieMapperImpl implements IMapper<Movie, MovieDto> {
     }
 
     private void configureModelMapper() {
-        // Create a type map from Movie to MovieDto and skip fields if necessary
       modelMapper.createTypeMap(MovieDto.class, Movie.class)
                 .addMappings(mapper -> {
-                    // Skip fields if necessary, e.g. screenings if circular reference
                     mapper.skip(Movie::setScreenings);
                 });
 
-       // Create a type map from Screening to ScreeningDto
-     /*   modelMapper.createTypeMap(Screening.class, ScreeningDto.class)
-                .addMappings(mapper -> {
-                    // Skip fields that might cause circular reference or are not needed
-                    mapper.skip(ScreeningDto::setOccupiedSeats);
-                });*/
+
     }
 
-    // Convert from entity to DTO
     public MovieDto toDto(Movie movie) {
         if (movie == null) return null;
 
-        // Map base fields from Movie to MovieDto
         MovieDto movieDto = modelMapper.map(movie, MovieDto.class);
 
         // Handle nested screenings separately to prevent circular references
         if (movie.getScreenings() != null) {
             List<ScreeningDto> screeningDtos = movie.getScreenings().stream()
-                    .map(screeningMapper::toDto)  // Use ScreeningMapper to convert to ScreeningDto
+                    .map(screeningMapper::toDto)
                     .collect(Collectors.toList());
             movieDto.setScreenings(screeningDtos);
         }

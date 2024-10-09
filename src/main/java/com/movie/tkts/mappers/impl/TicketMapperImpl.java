@@ -16,16 +16,6 @@ public class TicketMapperImpl implements IMapper<Ticket, TicketDto> {
 
     public TicketMapperImpl(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
-       /* modelMapper.createTypeMap(Ticket.class, TicketDto.class)
-                .addMappings(mapper -> {
-                    mapper.skip(TicketDto::setBookingId);
-                })
-                .addMappings(mapper -> {
-                    mapper.skip(TicketDto::setBookingId);
-                })
-                .addMappings(mapper -> {
-                    mapper.skip(TicketDto::setScreeningId);
-                });*/
     }
 
     @Override

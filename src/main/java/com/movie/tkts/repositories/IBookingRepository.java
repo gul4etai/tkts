@@ -10,13 +10,6 @@ import java.util.List;
 
 public interface IBookingRepository extends JpaRepository<Booking, Long> {
 
-  /*  @Query("SELECT b.screening.movie, COUNT(b) AS booking_count " +
-            "FROM Booking b " +
-            "WHERE b.bookingTime BETWEEN :startDate AND :endDate " +
-            "GROUP BY b.screening.movie " +
-            "ORDER BY booking_count DESC")
-    List<Object[]> findMostWatchedMovies(@Param("startDate") LocalDateTime startDate,
-                                         @Param("endDate") LocalDateTime endDate);*/
 
     List<Booking> findByUserId(Long userId);
 

@@ -30,8 +30,4 @@ public interface IUserRepository extends JpaRepository<User, Long> {
             "GROUP BY u ORDER BY COUNT(b) ASC")
     List<User> findLeastActiveUsers(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
-   /* @Query("SELECT new com.movie.tkts.dto.UserDto(u.email, u.admin) FROM User u")
-    List<UserDto> getAllUsers();*/
-
-
 }

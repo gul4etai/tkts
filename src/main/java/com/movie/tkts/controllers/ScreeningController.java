@@ -44,18 +44,6 @@ public class ScreeningController {
         return screeningService.getAllScreenings();
     }
 
-/*    @GetMapping("/{screeningId}/booked-seats")
-    public ResponseEntity<List<SeatDto>> getBookedSeats(@PathVariable Long screeningId) {
-        List<SeatDto> bookedSeats = screeningService.getBookedSeats(screeningId);
-        return ResponseEntity.ok(bookedSeats);
-    }
-
-    @GetMapping("/{screeningId}/available-seats")
-    public ResponseEntity<List<SeatDto>> getAvailableSeats(@PathVariable Long screeningId) {
-        List<SeatDto> availableSeats = screeningService.getAvailableSeats(screeningId);
-        return ResponseEntity.ok(availableSeats);
-    }*/
-
 
     @GetMapping("/{id}")
     public ResponseEntity<ScreeningDto> getScreeningById(@PathVariable Long id) {

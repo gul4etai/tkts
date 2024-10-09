@@ -33,8 +33,8 @@ public class JwtUtil {
 
     // parse claims
     private Claims extractAllClaims(String token) {
-        Key key = Keys.hmacShaKeyFor(secret.getBytes());  // Use a secure key for signing
-        return Jwts.parser() // Ensure parserBuilder() resolves correctly
+        Key key = Keys.hmacShaKeyFor(secret.getBytes());  // secure key for signing
+        return Jwts.parser()
                 .setSigningKey(key)  // Set the signing key
                 .build()
                 .parseClaimsJws(token)
@@ -67,7 +67,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 30))
-                .signWith(key)  // Use the generated key to sign
+                .signWith(key)
                 .compact();
     }
 

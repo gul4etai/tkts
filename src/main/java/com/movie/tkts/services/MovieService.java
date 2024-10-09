@@ -52,46 +52,37 @@ public class MovieService {
 
     @Transactional
     public MovieDto createMovie(MovieDto movieDto) {
-        // Set the movie's ID to null to ensure it's treated as a new entity
         movieDto.setId(null);
-
-        // Convert DTO to entity and save the movie first (without screenings)
         Movie movie = movieMapper.toEntity(movieDto);
 
-        // Handle screenings separately and link them to the movie before saving the movie
         if (movieDto.getScreenings() != null) {
             List<Screening> screenings = new ArrayList<>();
             for (ScreeningDto screeningDto : movieDto.getScreenings()) {
-                screeningDto.setId(null);  // Set the screening ID to null to ensure it's treated as a new entity
+                screeningDto.setId(null);
                 Screening screening = screeningMapper.toEntity(screeningDto);
-                screening.setMovie(movie);  // Link screening to the unsaved movie
+                screening.setMovie(movie);
 
-                // Fetch the Theater entity using the theaterId in screeningDto
                 Theater theater = theaterRepository.findById(screeningDto.getTheaterId())
                         .orElseThrow(() -> new ResourceNotFoundException("Theater not found with id: " + screeningDto.getTheaterId()));
-                screening.setTheater(theater);  // Set the theater for the screening
+                screening.setTheater(theater);
 
                 screenings.add(screening);
             }
-            // Link the screenings to the movie before persisting the movie
+            // Link the screenings to the movie before save
             movie.setScreenings(screenings);
         }
 
-        // Save the movie with screenings at once
         Movie savedMovie = movieRepository.save(movie);
-
-        // Return the saved movie as a DTO
         return movieMapper.toDto(savedMovie);
     }
 
 
   @Transactional
   public MovieDto updateMovie(Long movieId, MovieDto updatedMovieDto) {
-      // Find the existing movie
+
       Movie existingMovie = movieRepository.findById(movieId)
               .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
 
-      // Update movie details (if provided)
       existingMovie.setTitle(updatedMovieDto.getTitle());
       existingMovie.setPrice(updatedMovieDto.getPrice());
       existingMovie.setGenre(updatedMovieDto.getGenre());
@@ -99,30 +90,25 @@ public class MovieService {
       existingMovie.setImgURL(updatedMovieDto.getImgURL());
       existingMovie.setDescription(updatedMovieDto.getDescription());
 
-      // Save the updated movie details first (without updating screenings yet)
       movieRepository.save(existingMovie);
 
       // Handle screenings separately
       List<Screening> existingScreenings = screeningRepository.findByMovie_Id(movieId);
       List<Screening> updatedScreenings = new ArrayList<>();
 
-      // Convert DTOs to Screening entities
       for (ScreeningDto screeningDto : updatedMovieDto.getScreenings()) {
           Screening screening = screeningMapper.toEntity(screeningDto);
-          screening.setMovie(existingMovie); // Link screening to the updated movie
+          screening.setMovie(existingMovie); // link screening to the updated movie
 
-          // Fetch the Theater entity using the theaterId in ScreeningDto
           Theater theater = theaterRepository.findById(screeningDto.getTheaterId())
                   .orElseThrow(() -> new ResourceNotFoundException("Theater not found with id: " + screeningDto.getTheaterId()));
           screening.setTheater(theater); // Set the theater for the screening
-
           updatedScreenings.add(screening);
       }
 
-      // Update existing screenings and identify which screenings to delete
       updateScreenings(existingScreenings, updatedScreenings, existingMovie);
 
-      // Fetch the updated screenings manually after saving
+      // get updated screenings from repository
       List<Screening> finalScreenings = screeningRepository.findByMovie_Id(movieId);
       List<ScreeningDto> screeningDtos = finalScreenings.stream()
               .map(screeningMapper::toDto)
@@ -131,16 +117,11 @@ public class MovieService {
       // Set the updated screenings in the MovieDto
       MovieDto movieDto = movieMapper.toDto(existingMovie);
       movieDto.setScreenings(screeningDtos);
-
-      //??
-     // movieRepository.save(existingMovie);
-
-      // Return the updated movie as a DTO with screenings
       return movieDto;
   }
 
     private void updateScreenings(List<Screening> existingScreenings, List<Screening> updatedScreenings, Movie movie) {
-        // Create a map of existing screenings by ID for easy lookup
+
         Map<Long, Screening> existingScreeningMap = existingScreenings.stream()
                 .collect(Collectors.toMap(Screening::getId, Function.identity()));
 
@@ -152,8 +133,8 @@ public class MovieService {
         while (iterator.hasNext()) {
             Screening existingScreening = iterator.next();
             if (!updatedScreeningMap.containsKey(existingScreening.getId())) {
-                iterator.remove();  // Remove the screening from the movie's list
-                screeningRepository.deleteById(existingScreening.getId());  // Delete the screening from the repository
+                iterator.remove();  // remove the screening from list
+                screeningRepository.deleteById(existingScreening.getId());
             }
         }
 
@@ -183,44 +164,31 @@ public class MovieService {
 
     @Transactional
     public List<MovieDto> getAllMovies() {
-        // Fetch all movies from the repository
         List<Movie> movies = movieRepository.findAll();
         List<MovieDto> movieDtos = new ArrayList<>();
         for (Movie movie : movies) {
-           // movie.getScreenings().clear(); //to map screenings manually
-            // Map the movie to MovieDto (without screenings)
             MovieDto movieDto = movieMapper.toDto(movie);
 
-            // Fetch the screenings manually for each movie
             List<Screening> screenings = movie.getScreenings();//screeningRepository.findByMovieId(movie.getId());
-
-            // Map screenings to ScreeningDto and fetch occupied seats
+            // get occupied seats for screenings
             List<ScreeningDto> screeningDtos = new ArrayList<>();
             for (Screening screening : screenings) {
                 ScreeningDto screeningDto = screeningMapper.toDto(screening);
 
-                // Fetch tickets for this screening to get the occupied seats
                 List<Ticket> tickets = ticketRepository.findByScreeningId(screening.getId());
-
-                // Map occupied seats in the format [[rowNum, seatNum]]
+                // map occupied seats
                 List<int[]> occupiedSeats = new ArrayList<>();
                 for (Ticket ticket : tickets) {
                     int[] seatCoordinates = new int[]{ticket.getSeat().getRowNum(), ticket.getSeat().getSeatNum()};
                     occupiedSeats.add(seatCoordinates);
                 }
 
-                // Set occupied seats in ScreeningDto
                 screeningDto.setOccupiedSeats(occupiedSeats);
-
                 screeningDtos.add(screeningDto);
             }
-
-            // Set the screenings list in the MovieDto
             movieDto.setScreenings(screeningDtos);
-
             movieDtos.add(movieDto);
         }
-
         return movieDtos;
     }
 
@@ -262,35 +230,25 @@ public class MovieService {
 
     @Transactional
     public MovieDto getMovieById(Long movieId) {
-        // Fetch the movie by its ID
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found"));
-
-        // Map the movie to MovieDto (without screenings)
         MovieDto movieDto = movieMapper.toDto(movie);
 
-        // Fetch the screenings manually for this movie
+        // get the screenings
         List<Screening> screenings = screeningRepository.findByMovieId(movieId);
-
-        // Map screenings to ScreeningDto and fetch occupied seats
         List<ScreeningDto> screeningDtos = screenings.stream().map(screening -> {
             ScreeningDto screeningDto = screeningMapper.toDto(screening);
-
-            // Fetch tickets for this screening to get the occupied seats
             List<Ticket> tickets = ticketRepository.findByScreeningId(screening.getId());
 
-            // Map occupied seats in the format [[rowNum, seatNum]]
+            // map occupied seats [[rowNum, seatNum]]
             List<int[]> occupiedSeats = tickets.stream()
                     .map(ticket -> new int[]{ticket.getSeat().getRowNum(), ticket.getSeat().getSeatNum()})
                     .collect(Collectors.toList());
-
-            // Set occupied seats in ScreeningDto
             screeningDto.setOccupiedSeats(occupiedSeats);
 
             return screeningDto;
         }).collect(Collectors.toList());
 
-        // Set the screenings list in the MovieDto
         movieDto.setScreenings(screeningDtos);
 
         return movieDto;
@@ -298,22 +256,18 @@ public class MovieService {
 
     @Transactional(readOnly = true)
     public List<MovieDto> getMostBookedMovies(String startDate, String endDate) {
-        // Parse the string parameters into LocalDate
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
 
-        // Call the repository method with LocalDate parameters
         List<Movie> movies = movieRepository.findMostBookedMovies(start, end);
         return movies.stream().map(movieMapper::toDto).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<MovieDto> getLeastBookedMovies(String startDate, String endDate) {
-        // Parse the string parameters into LocalDate
         LocalDate start = LocalDate.parse(startDate);
         LocalDate end = LocalDate.parse(endDate);
 
-        // Call the repository method with LocalDate parameters
         List<Movie> movies = movieRepository.findLeastBookedMovies(start, end);
         return movies.stream().map(movieMapper::toDto).collect(Collectors.toList());
     }
