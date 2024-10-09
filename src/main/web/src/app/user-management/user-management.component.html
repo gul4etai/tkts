@@ -1,0 +1,30 @@
+<div class="container mt-5">
+    <h2>User Management</h2>
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+  
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Is Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.admin ? 'Yes' : 'No' }}</td>
+          <td class="text-end">
+            <button class="btn btn-outline-primary ms-2" [disabled]="user.admin"  (click)="makeAdmin(user)">Make Admin</button>
+            <button *ngIf="user.id" class="btn btn-outline-danger ms-2" (click)="deleteUser(user.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+
+

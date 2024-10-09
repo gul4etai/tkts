@@ -1,0 +1,72 @@
+<div class="container mt-5" *ngIf="movie">
+  <h2>{{ isNewMovie ? 'Add New Movie' : 'Edit Movie - ' + movie.title }}</h2>
+
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
+      <button class="btn btn-outline-secondary m-0" (click)="goBack()">Back</button>
+  </div>
+
+  <form (ngSubmit)="saveChanges()">
+      <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" id="title" class="form-control" [(ngModel)]="movie.title" name="title" required>
+      </div>
+
+      <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea id="description" class="form-control" [(ngModel)]="movie.description" name="description" required></textarea>
+      </div>
+
+      <div class="mb-3">
+          <label for="imgURL" class="form-label">imgURL</label>
+          <input type="text" id="imgURL" class="form-control" [(ngModel)]="movie.imgURL" name="imgURL" required>
+      </div>
+
+      <div class="mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input type="number" id="price" class="form-control" [(ngModel)]="movie.price" name="price" required>
+      </div>
+
+      <div class="mb-3">
+          <label for="genre" class="form-label">Genre</label>
+          <select id="genre" class="form-select" [(ngModel)]="movie.genre" name="genre" required>
+              <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+          </select>
+      </div>
+
+      <div class="mb-3">
+          <h5>Select Theater</h5>
+          <select class="form-select" [(ngModel)]="selectedTheaterId" name="theater" (ngModelChange)="onTheaterSelect()">
+              <option value="" disabled>Select a theater</option>
+              <option *ngFor="let theater of theaters" [value]="theater.id">{{ theater.name }}</option>
+          </select>
+      </div>
+
+      <!-- Screenings for Selected Theater -->
+      <div class="mb-3" *ngIf="selectedTheaterId">
+          <h5>Screenings for {{ getSelectedTheaterName() }}</h5>
+          <ul class="list-group">
+              <li *ngFor="let screening of screeningsForSelectedTheater" class="list-group-item">
+                  <strong>Date:</strong> {{ screening.date }} |
+                  <strong>Time:</strong> {{ screening.time }}
+                  <button class="btn btn-danger btn-sm float-end" (click)="removeScreening(screening)">Remove</button>
+              </li>
+          </ul>
+      </div>
+
+      <!-- Add Screening -->
+      <div class="mb-3" *ngIf="selectedTheaterId">
+          <h5>Add New Screening for {{ getSelectedTheaterName() }}</h5>
+
+          <label for="screening-date" class="form-label">Date</label>
+          <input type="date" id="screening-date" class="form-control" [(ngModel)]="newScreening.date" name="screeningDate" required>
+
+          <label for="screening-times" class="form-label">Times (HH:mm:ss)</label>
+          <input type="text" id="screening-times" class="form-control" [(ngModel)]="newScreening.time" name="screeningTimes" required>
+
+
+          <button type="button" class="btn btn-secondary mt-2" (click)="addScreening()">Add Screening</button>
+      </div>
+
+      <button type="submit" class="btn btn-success mt-3">{{ isNewMovie ? 'Add Movie' : 'Save Changes' }}</button>
+  </form>
+</div>

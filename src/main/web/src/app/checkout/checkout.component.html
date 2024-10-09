@@ -1,0 +1,61 @@
+<div class="container mt-5">
+    <h2>Checkout</h2>
+  
+    <h4>Selected Seats for "{{ movie.title }}" in {{ theater.name }} </h4>
+    <h4> {{ date }} at {{ time }} </h4>
+    <div *ngIf="selectedSeats.length > 0">
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let seat of selectedSeats">
+          Row {{ seat.row }}, Seat {{ seat.seat }}
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="selectedSeats.length === 0">
+      <p>No seats selected.</p>
+    </div>
+  
+    <div class="mt-4">
+      <h4>Total Amount: ${{ selectedSeats.length * movie.price }}</h4>
+    </div>
+  
+    <div class="d-grid gap-2 d-md-block mt-3">
+        <button class="btn btn-outline-secondary me-3" (click)="goBack()">Back</button>
+        <button class="btn btn-success" (click)="reserveTickets()">Proceed to Payment</button>
+    </div>
+  </div>
+  
+
+  <div class="modal fade" #successModal id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="successModalLabel">Reservation Success</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Reservation completed successfully!</p>
+          <p><strong>Reservation Number:</strong> {{ reservationNumber }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" #errorModal id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="errorModalLabel">Reservation Success</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {{ errorMessage }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>

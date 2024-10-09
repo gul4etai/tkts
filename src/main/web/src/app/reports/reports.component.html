@@ -1,0 +1,53 @@
+<div class="container">
+  <h4 class="mt-4 mb-5">Select a date range and a report to display</h4>
+  
+  <!--date inputs -->
+  <div class="row">
+    <div class="col-6 mb-5">
+      <label for="startDate" class="form-label">Start Date:</label>
+      <input type="date" id="startDate" [(ngModel)]="startDate" class="form-control" required>
+    </div>
+
+    <div class="col-6 mb-2">
+      <label for="endDate" class="form-label">End Date:</label>
+      <input type="date" id="endDate" [(ngModel)]="endDate" class="form-control" required>
+    </div>
+  </div>
+
+  
+  <div class="row">
+    <div class="col-6 mb-2">
+      <button class="btn btn-outline-primary w-100" (click)="fetchMostWatchedMovieTitles()">Most Watched Movies</button>
+    </div>
+    <div class="col-6 mb-2">
+      <button class="btn btn-outline-primary w-100" (click)="fetchLeastWatchedMovieTitles()">Least Watched Movies</button>
+    </div>
+    <div class="col-6 mb-2">
+      <button class="btn btn-outline-primary w-100" (click)="fetchMostActiveUsernames()">Most Active Users</button>
+    </div>
+    <div class="col-6 mb-2">
+      <button class="btn btn-outline-primary w-100" (click)="fetchLeastActiveUsernames()">Least Active Users</button>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <!-- results -->
+  <ul class="list-group mt-3" *ngIf="movieTitles.length > 0">
+    <li class="list-group-item" *ngFor="let title of movieTitles">
+      {{ title }}
+    </li>
+  </ul>
+
+
+  <ul class="list-group mt-3" *ngIf="usernames.length > 0">
+    <li class="list-group-item" *ngFor="let username of usernames">
+      {{ username }}
+    </li>
+  </ul>
+
+ 
+  <p *ngIf="movieTitles.length === 0 && usernames.length === 0 && !errorMessage">No reports available yet.</p>
+</div>

@@ -1,0 +1,61 @@
+<div class="container mt-5">
+  <h2>User Panel</h2>
+  
+  <form [formGroup]="userUpdateForm" (ngSubmit)="onUpdateUser()">
+    <div class="mb-3">
+      <label for="username" class="form-label">password</label>
+      <input type="text" id="password" class="form-control" formControlName="password">
+      <div *ngIf="userUpdateForm.get('password')?.invalid && userUpdateForm.get('password')?.touched" class="text-danger">
+        Username is required.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" id="email" class="form-control" formControlName="email">
+      <div *ngIf="userUpdateForm.get('email')?.invalid && userUpdateForm.get('email')?.touched" class="text-danger">
+        Enter a valid email.
+      </div>
+    </div>
+
+    <!-- Admin field is handled via form control disable in the TypeScript file -->
+    <div class="mb-3">
+      User role: {{ currentUser?.admin ? "Admin" : "Regular user" }}
+    </div>
+
+    <button type="submit" class="btn btn-outline-primary" [disabled]="userUpdateForm.invalid">Update user details</button>
+  </form>
+
+  <div class="mt-5">
+    <h4>Your Bookings</h4>
+    <div *ngIf="currentUser?.bookings?.length > 0; else noBookings">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Booking ID</th>
+            <th>Movie</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Theater</th>
+            <th>Tickets</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let booking of currentUser?.bookings">
+            <td>{{ booking.id }}</td>
+            <td>{{ booking.movieTitle }}</td>
+            <td>{{ booking.screening.date }}</td>
+            <td>{{ booking.screening.time }}</td>
+            <td>{{ getTheaterName(booking.screening.theaterId) }}</td>
+            <td>
+              {{ booking.tickets.length }} Tickets
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    <ng-template #noBookings>
+      <p>You have no bookings.</p>
+    </ng-template>
+  </div>
+</div>

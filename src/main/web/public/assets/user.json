@@ -1,0 +1,85 @@
+{
+    "id": 1,
+    "password": "admin",
+    "email": "user@mail.com",
+    "username": "admin",
+    "bookings": [
+        {
+            "id": 6,
+            "bookingTime": "2024-09-23T19:30:24.705706",
+            "screening": {
+                "id": 2,
+                "date": "2024-10-01",
+                "time": "18:00:00",
+                "theaterId": 6,
+                "occupiedSeats": null
+            },
+            "userId": 1,
+            "tickets": [
+                {
+                    "id": 22,
+                    "bookingId": 6,
+                    "seatId": 411,
+                    "screeningId": 2
+                },
+                {
+                    "id": 23,
+                    "bookingId": 6,
+                    "seatId": 431,
+                    "screeningId": 2
+                },
+                {
+                    "id": 21,
+                    "bookingId": 6,
+                    "seatId": 433,
+                    "screeningId": 2
+                },
+                {
+                    "id": 24,
+                    "bookingId": 6,
+                    "seatId": 452,
+                    "screeningId": 2
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "bookingTime": "2024-09-23T19:35:23.506936",
+            "screening": {
+                "id": 3,
+                "date": "2024-10-02",
+                "time": "20:00:00",
+                "theaterId": 7,
+                "occupiedSeats": null
+            },
+            "userId": 1,
+            "tickets": [
+                {
+                    "id": 26,
+                    "bookingId": 7,
+                    "seatId": 411,
+                    "screeningId": 3
+                },
+                {
+                    "id": 27,
+                    "bookingId": 7,
+                    "seatId": 431,
+                    "screeningId": 3
+                },
+                {
+                    "id": 25,
+                    "bookingId": 7,
+                    "seatId": 433,
+                    "screeningId": 3
+                },
+                {
+                    "id": 28,
+                    "bookingId": 7,
+                    "seatId": 452,
+                    "screeningId": 3
+                }
+            ]
+        }
+    ],
+    "admin": true
+}

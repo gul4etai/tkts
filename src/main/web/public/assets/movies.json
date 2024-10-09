@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "title": "Inception",
+    "description": "A thief who steals corporate secrets using dream-sharing technology.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMjExMjkwNTQ0Nl5BMl5BanBnXkFtZTcwNTY0OTk1Mw@@._V1_.jpg",
+    "price": 10.99,
+    "genre": "Sci-Fi",
+    "screenings": [
+      { "id": 1, "theaterId": 1, "date": "2023-09-21", "time": "12:00 PM", "occupiedSeats":[[1,1], [4,1]] },
+      { "id": 1, "theaterId": 1, "date": "2023-09-21", "time": "14:00 PM", "occupiedSeats":[[1,5], [2,1]] }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "The Matrix",
+    "description": "A hacker learns about the true nature of reality and his role in the war.",
+    "poster": "https://m.media-amazon.com/images/I/51EG732BV3L._AC_.jpg",
+    "price": 9.99,
+    "genre": "Action",
+    "screenings": [
+      { "id": 1, "theaterId": 2, "date": "2023-09-21", "time": "12:00 PM", "occupiedSeats":[[1,2], [4,1]] },
+      { "id": 1, "theaterId": 2, "date": "2023-09-21", "time": "14:00 PM", "occupiedSeats":[[1,5], [2,1]] }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Interstellar",
+    "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+    "poster": "https://m.media-amazon.com/images/I/91kFYg4fX3L._AC_SL1500_.jpg",
+    "price": 12.99,
+    "genre": "Drama",
+    "screenings": [
+      { "id": 1, "theaterId": 2, "date": "2023-09-21", "time": "12:00 PM", "occupiedSeats":[[1,2], [4,0]] },
+      { "id": 1, "theaterId": 1, "date": "2023-09-21", "time": "14:00 PM", "occupiedSeats":[[1,5], [2,0]] }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "The Dark Knight",
+    "description": "Batman faces the Joker, a criminal mastermind causing chaos in Gotham City.",
+    "poster": "https://m.media-amazon.com/images/M/MV5BMTk4ODQzNDY3Ml5BMl5BanBnXkFtZTcwODA0NTM4Nw@@._V1_FMjpg_UX1000_.jpg",
+    "price": 11.99,
+    "genre": "Action",
+    "screenings": [
+      { "id": 1, "theaterId": 1, "date": "2023-09-21", "time": "12:00 PM", "occupiedSeats":[[1,2], [4,0]] },
+      { "id": 1, "theaterId": 2, "date": "2023-09-21", "time": "14:00 PM", "occupiedSeats":[[1,5], [2,0]] }
+    ]
+  }
+]

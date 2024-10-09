@@ -1,0 +1,52 @@
+
+<div class="container mt-5">
+    <h2>Theaters List</h2>
+      
+    <form [formGroup]="theaterForm" (ngSubmit)="addTheater()" class="mt-3">
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="name">Theater Name:</label>
+          <input id="name" formControlName="name" class="form-control" type="text" />
+        </div>
+        <div class="col-md-3">
+          <label for="rows">Number of Rows:</label>
+          <input id="rows" formControlName="rows" class="form-control" type="number" />
+        </div>
+        <div class="col-md-3">
+          <label for="seats">Seats per Row:</label>
+          <input id="seats" formControlName="seats" class="form-control" type="number" />
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary" style="width: 150px; white-space: nowrap;" [disabled]="!theaterForm.valid">Add Theater</button>
+        </div>
+      </div>
+    </form>
+  
+    <table class="table table-striped mt-3">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Rows</th>
+          <th>Seats</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let theater of theaters">
+          <td>{{ theater.id }}</td>
+          <td>{{ theater.name }}</td>
+          <td>{{ theater.rows }}</td>
+          <td>{{ theater.seats }}</td>
+          <td class="text-end">
+            <button class="btn btn-outline-danger ms-2" (click)="deleteTheater(theater.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="theaters.length === 0" class="alert alert-warning mt-3">
+      No theaters found.
+    </div>
+  </div>
+  

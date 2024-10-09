@@ -1,0 +1,7 @@
+[
+    { "id": 1, "name": "Central Cinema", "rows": 8, "seats": 7 },
+    { "id": 2, "name": "City Plaza Theater", "rows": 7, "seats": 5 },
+    { "id": 6, "name": "Central Up Cinema", "rows": 8, "seats": 7 },
+    { "id": 7, "name": "City Theater", "rows": 7, "seats": 5 }
+  ]
+  

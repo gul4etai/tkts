@@ -1,0 +1,36 @@
+<div class="container mt-5">
+    <h2>Movies List</h2>
+    <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-2">
+      <button class="btn btn-outline-secondary m-0" (click)="goBack()">Back</button>
+      <button class="btn btn-primary ms-0 m-0" [routerLink]="['/admin/add-movie']">Add new movie</button>
+    </div>
+  
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>imgURL</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Price</th>
+          <th>Genre</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let movie of movies$ | async">
+          <td><img [src]="movie.imgURL" alt="{{ movie.title }}" class="img-thumbnail" style="width: 100px;"></td>
+          <td>{{ movie.title }}</td>
+          <td>{{ movie.description }}</td>
+          <td>${{ movie.price }}</td>
+          <td>{{ movie.genre }}</td>
+          <td>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-outline-primary me-2" (click)="editMovie(movie.id)">Edit</button>
+                <button class="btn btn-outline-danger" (click)="deleteMovie(movie.id)">Delete</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

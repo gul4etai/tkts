@@ -1,0 +1,44 @@
+.seat-map div {
+  display: inline-block;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  width: 40px; /* seats size */
+  height: 40px; 
+}
+
+.available {
+  background-color: green;
+  color: white;
+}
+
+.unavailable {
+  background-color: grey;
+  color: white;
+  cursor: not-allowed;
+}
+
+.selected-seats span {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+img.img-fluid {
+  max-width: 100%;
+  height: auto;
+}
+
+h5 {
+  margin-top: 20px;
+}
+
+.mt-3, .mb-3 {
+  margin-top: 15px !important;
+  margin-bottom: 15px !important;
+}
+
+.seat-btn {
+  
+}

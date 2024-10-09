@@ -1,0 +1,26 @@
+<div style="margin: 2vh 0;">
+    <div class="container">
+        <div class="row">
+            <!-- Filter by Name -->
+            <div class="col">
+                <input type="text" class="form-control" placeholder="Filter by Movie Name" [(ngModel)]="filterName" (input)="onFilterChange()" />
+            </div>
+    
+            <!-- Filter by Genre -->
+            <div class="col">
+                <select class="form-select" [(ngModel)]="selectedGenre" (change)="onFilterChange()">
+                    <option value="">All Genre</option>
+                    <option *ngFor="let genre of genres" [value]="genre">{{ genre }}</option>
+                </select>
+            </div>
+
+            <div class="col-1">
+                <button class="btn btn-outline-secondary" (click)="resetFilters()">Reset</button>
+            </div>
+        </div>
+    
+    </div>
+    
+
+    <app-movies></app-movies>
+</div>

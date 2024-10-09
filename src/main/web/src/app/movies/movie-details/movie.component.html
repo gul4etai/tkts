@@ -1,0 +1,84 @@
+<div class="container mt-5">
+  <!-- Movie details -->
+  <div>
+    <a (click)="goBack()" class="btn btn-outline-secondary mt-3">Back</a>
+  </div>
+  <div *ngIf="movie">
+    <div class="row">
+      <!-- Movie image -->
+      <div class="col-md-4">
+        <img [src]="movie.imgURL" alt="{{ movie.title }}" class="img-fluid">
+      </div>
+
+      <!-- Movie Information -->
+      <div class="col-md-8">
+        <h2>{{ movie.title }}</h2>
+        <p>{{ movie.description }}</p>
+        <h5>Price: ${{ movie.price }}</h5>
+
+        <hr>
+        <div class="mt-3">
+          <div class="row">
+            <div class="col-6" *ngIf="theaters$ | async as theaters">
+              <h5>Select Theater</h5>
+              <select class="form-select" [(ngModel)]="selectedTheaterId" (ngModelChange)="onTheaterSelect()">
+                <option value="" disabled selected>Select a theater</option>
+                <option *ngFor="let theater of theaters" [value]="theater.id">{{ theater.name }}</option>
+              </select>
+            </div>
+
+            <!-- Screening Date and Time -->
+            <div class="" *ngIf="screenings$ | async as screenings">
+              <div class="row">
+                <div class="col-6">
+                  <h5>Select Date</h5>
+                  <select class="form-select" [(ngModel)]="selectedDate" (ngModelChange)="onDateSelect()">
+                    <option value="" disabled selected>Select a date</option>
+                    <option *ngFor="let date of uniqueDates" [value]="date">{{ date }}</option>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <h5>Select Time</h5>
+                  <select class="form-select" [(ngModel)]="selectedTime" (ngModelChange)="loadSeats()">
+                    <option value="" disabled selected>Select a time</option>
+                    <option *ngFor="let time of availableTimes">{{ time }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Seat Map -->
+          <div class="mb-3" *ngIf="seatMap$ | async as seatMap">
+            <h5>Select Your Seats</h5>
+            <div class="row align-items-center mb-2" style="margin-right: 3vh !important;" *ngFor="let row of seatMap; let rowIndex = index">
+              <div class="col-auto">
+                <strong>{{ rowIndex + 1 }}</strong>
+              </div>
+              <div class="col" *ngFor="let seat of row; let seatIndex = index">
+                <button 
+                  class="btn btn-sm seat-btn" 
+                  [ngClass]="{'btn-success': isSelected(rowIndex + 1, seatIndex + 1), 'btn-secondary': !isSelected(rowIndex + 1, seatIndex + 1)}"
+                  [disabled]="!seat.available"
+                  (click)="selectSeat(rowIndex + 1, seatIndex + 1)">
+                  {{ seatIndex + 1 }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr class="mt-2">
+      <!-- Selected Seats -->
+      <div class="mt-3">
+        <div *ngIf="selectedSeats.length > 0" class="">
+          <h5 style="margin-top:0;">You have selected {{ selectedSeats.length }} seats for the total price of ${{ selectedSeats.length * movie.price }} </h5>
+          <div class="d-grid gap-2">
+            <button class="btn btn-outline-primary" (click)="goToCheckout()">Pay now</button>
+          </div>
+        </div>
+        <div *ngIf="selectedSeats.length === 0">No seats selected</div>
+      </div>
+    </div>
+  </div>
+</div>
